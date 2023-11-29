@@ -1,0 +1,46 @@
+# Compiled Python files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Compiled UI files (if using PyQt Designer)
+*.ui.py
+
+# Byte-compiled Python files
+*.pyc
+*.pyo
+__pycache__/
+
+# Logs and databases
+*.log
+*.sqlite
+*.db
+
+# IDE-specific files (if using an IDE like PyCharm, Visual Studio Code, etc.)
+.idea/
+.vscode/
+
+# Environment and virtual environment files
+.env
+venv/
+env/
+
+# PyQt-specific files
+*.qrc
+
+# Compiled resources
+*.pyc
+
+# Compiled translations
+*.qm
+
+# Compiled executables
+*.exe
+*.dll
+
+# macOS-specific
+.DS_Store
+
+# Temporary files
+*.bak

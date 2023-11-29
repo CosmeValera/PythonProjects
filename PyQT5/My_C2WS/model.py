@@ -1,6 +1,6 @@
 class MyModel:
     def __init__(self):
-        self._data = None
+        self._data = "My data"
 
     def set_data(self, data):
         self._data = data
