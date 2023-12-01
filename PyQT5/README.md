@@ -1,10 +1,5 @@
-# PyQT5
-
-## 🧠 What is it?
-PyQt5 is a set of Python bindings for Qt, a cross-platform application framework. Qt is widely used for developing graphical user interfaces (GUIs) and also provides functionality for tasks such as networking, file I/O, and more.
-
-## 📦 Prerequirements
-- **Python:** Version 3.6 or later. You can download the latest version of Python [here](https://www.python.org/downloads/).
+## C2WS image
+![](img/previous_C2WS.png)
 
 ## 🚀 Getting Started
 To initiate a PyQt5 project, the initial steps involve installing PyQt5, PyQt5-tools, and PyInstaller. 
@@ -13,6 +8,24 @@ pip install pyqt5
 pip install pyqt5-tools
 pip install pyinstaller
 ```
+
+## 🎨 Adding Qt Material Theme
+```bash
+pip install qt-material
+```
+```python
+# [Other imports]
+from qt_material import apply_stylesheet
+
+class GUI(QMainWindow):
+    def __init__(self):
+        # [Code]
+        apply_stylesheet(app, theme='light_teal.xml')  # Choose the theme you prefer
+
+if __name__ == '__main__':
+    # [Main code]
+```
+
 
 ## 💻 Setting up Qt Designer
 
