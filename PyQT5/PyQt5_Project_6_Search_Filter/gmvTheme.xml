@@ -1,5 +1,5 @@
 <resources>
-    <color name="primaryColor">#DF0024</color>
+    <color name="primaryColor">#ffffff</color>
     <color name="primaryLightColor">#860015</color>
     <color name="secondaryColor">#191919</color>
     <color name="secondaryLightColor">#454545</color>

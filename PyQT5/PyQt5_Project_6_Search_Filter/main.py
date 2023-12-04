@@ -3,6 +3,7 @@ from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QLineEdit, QTabl
 from PyQt5.QtCore import Qt
 from functools import partial
 from qtawesome import icon
+from qt_material import apply_stylesheet
 
 class MyTableWidget(QTableWidget):
     def __init__(self, parent, headers, data):
@@ -34,6 +35,12 @@ class MyTableWidget(QTableWidget):
             self.setItem(index, 2, QTableWidgetItem(str(session.get("ws", ""))))
             self.setItem(index, 3, QTableWidgetItem(str(session.get("prot", ""))))
             self.setItem(index, 4, QTableWidgetItem(str(session.get("user", ""))))
+            
+            # Set items as read-only
+            for col in range(self.columnCount()):
+                item = self.item(index, col)
+                if item:
+                    item.setFlags(item.flags() & ~Qt.ItemIsEditable)
 
     def select_session(self, view):
         selected_row_index = self.selectedIndexes()[0].row()
@@ -43,6 +50,7 @@ class MyTableWidget(QTableWidget):
 class DataFilterApp(QWidget):
     def __init__(self):
         super().__init__()
+        apply_stylesheet(self, theme="gmvTheme.xml")
 
         self.headers = ["Fav", "Element", "Workstation", "Protocol", "User"]
         self.data = [
@@ -62,9 +70,8 @@ class DataFilterApp(QWidget):
         self.filter_input.setPlaceholderText("Type to filter...")
         self.filter_input.setClearButtonEnabled(True)
 
-
         # Add a search icon from FontAwesome to the filter input
-        search_icon = icon('fa.search', color='black')
+        search_icon = icon('fa.search', color='white')
         self.filter_input.addAction(search_icon, QLineEdit.LeadingPosition)
         self.filter_input.textChanged.connect(self.update_filter)
 
