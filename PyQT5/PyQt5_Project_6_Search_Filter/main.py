@@ -1,5 +1,6 @@
 import sys
 from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QLineEdit, QListWidget, QLabel
+from PyQt5.QtGui import QFont, QIcon
 
 class DataFilterApp(QWidget):
     def __init__(self):
@@ -15,6 +16,20 @@ class DataFilterApp(QWidget):
 
         self.filter_input = QLineEdit(self)
         self.filter_input.setPlaceholderText("Type to filter...")
+
+        # Set font for the filter input
+        font = QFont()
+        font.setBold(True)
+        self.filter_input.setFont(font)
+
+        # Add clear button to the filter input
+        self.filter_input.setClearButtonEnabled(True)
+
+        # Add a search icon to the filter input
+        search_icon = QIcon('img/lens.png')  # Replace with the path to your search icon
+        self.filter_input.addAction(search_icon, QLineEdit.LeadingPosition)
+
+        # Connect the filter signal to the update_filter method
         self.filter_input.textChanged.connect(self.update_filter)
 
         self.data_list = QListWidget(self)
