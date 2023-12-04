@@ -3,7 +3,21 @@ import sys
 import logging
 from multiprocessing import freeze_support
 
-if '--pyside2' in sys.argv:
+
+# if '--pyqt5' in sys.argv:
+from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog
+from PyQt5.QtCore import QTimer, Qt, QCoreApplication
+from PyQt5 import uic, QtWebEngineWidgets
+from PyQt5.QtGui import QIcon
+
+if '--pyqt6' in sys.argv:
+# elif '--pyqt6' in sys.argv:
+    from PyQt6.QtWidgets import QApplication, QMainWindow, QFileDialog
+    from PyQt6.QtCore import QTimer, Qt, QCoreApplication
+    from PyQt6.QtGui import QIcon
+    from PyQt6 import uic, QtWebEngineWidgets
+
+elif '--pyside2' in sys.argv:
     from PySide2.QtWidgets import QApplication, QMainWindow, QFileDialog
     from PySide2.QtCore import QTimer, Qt, QCoreApplication
     from PySide2.QtGui import QIcon
@@ -15,18 +29,6 @@ elif '--pyside6' in sys.argv:
     from PySide6.QtGui import QIcon, QPixmap
     from PySide6.QtUiTools import QUiLoader
     from __feature__ import snake_case, true_property
-
-elif '--pyqt5' in sys.argv:
-    from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog
-    from PyQt5.QtCore import QTimer, Qt, QCoreApplication
-    from PyQt5 import uic, QtWebEngineWidgets
-    from PyQt5.QtGui import QIcon
-
-elif '--pyqt6' in sys.argv:
-    from PyQt6.QtWidgets import QApplication, QMainWindow, QFileDialog
-    from PyQt6.QtCore import QTimer, Qt, QCoreApplication
-    from PyQt6.QtGui import QIcon
-    from PyQt6 import uic, QtWebEngineWidgets
 
 from qt_material import apply_stylesheet, QtStyleTools
 
@@ -77,7 +79,16 @@ class RuntimeStylesheets(QMainWindow, QtStyleTools):
         """Constructor"""
         super().__init__()
 
-        if '--pyside2' in sys.argv:
+        # if '--pyqt5' in sys.argv:
+        self.main = uic.loadUi('main_window.ui', self)
+        wt = 'PyQt5'
+
+        if '--pyqt6' in sys.argv:
+        # elif '--pyqt6' in sys.argv:
+            self.main = uic.loadUi('main_window.ui', self)
+            wt = 'PyQt6'
+
+        elif '--pyside2' in sys.argv:
             self.main = QUiLoader().load('main_window.ui', self)
             wt = 'PySide2'
 
@@ -85,19 +96,11 @@ class RuntimeStylesheets(QMainWindow, QtStyleTools):
             self.main = QUiLoader().load('main_window.ui', self)
             wt = 'PySide6'
 
-        elif '--pyqt5' in sys.argv:
-            self.main = uic.loadUi('main_window.ui', self)
-            wt = 'PyQt5'
-
-        elif '--pyqt6' in sys.argv:
-            self.main = uic.loadUi('main_window.ui', self)
-            wt = 'PyQt6'
-
-        else:
-            logging.error(
-                'must include --pyside2, --pyside6 or --pyqt5 in args!'
-            )
-            sys.exit()
+        # else:
+        #     logging.error(
+        #         'must include --pyside2, --pyside6 or --pyqt5 in args!'
+        #     )
+        #     sys.exit()
 
         try:
             self.main.setWindowTitle(f'{self.main.windowTitle()} - {wt}')

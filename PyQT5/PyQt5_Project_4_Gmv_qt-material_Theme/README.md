@@ -1,4 +1,14 @@
-# Qt-Material
+## 📂 Folders
+- In `examples` you have `full_features` in which you can execute the file `main.py` to see the styles being applied.
+- In `qt_material` you can find the `resources` code. And the themes list with the xml for each one.
+- In `docs` you can find the documentation page.
+
+
+This is a project clone from the qt-material original repo. Original readme below.
+
+👇👇👇
+
+# Qt-Material (Original readme)
 
 This is another stylesheet for **PySide6**, **PySide2**, **PyQt5** and **PyQt6**, which looks like Material Design (close enough).
 
@@ -18,21 +28,25 @@ And light:
 
 ## Navigation
 
-  * [Install](#install)
-  * [Usage](#usage)
-  * [Themes](#themes)
-  * [Custom colors](#custom-colors)
-  * [Usage](#usage)
-  * [Light themes](#light-themes)
-  * [Environ variables](#environ-variables)
-  * [Alternative QPushButtons and custom fonts](#alternative-qpushbuttons-and-custom-fonts)
-  * [Custom stylesheets](#custom-stylesheets)
-  * [Run examples](#run-examples)
-  * [New themes](#new-themes)
-  * [Change theme in runtime](#change-theme-in-runtime)
-  * [Export theme](#export-theme)
-  * [Density scale](#density-scale)
-  * [Troubleshoots](#troubleshoots)
+- [Qt-Material (Original readme)](#qt-material-original-readme)
+  - [Navigation](#navigation)
+  - [Install](#install)
+  - [Usage](#usage)
+  - [Themes](#themes)
+  - [Custom colors](#custom-colors)
+  - [Light themes](#light-themes)
+  - [Environ variables](#environ-variables)
+  - [Alternative QPushButtons and custom fonts](#alternative-qpushbuttons-and-custom-fonts)
+  - [Custom stylesheets](#custom-stylesheets)
+  - [Run examples](#run-examples)
+  - [New themes](#new-themes)
+  - [Change theme in runtime](#change-theme-in-runtime)
+    - [Integrate stylesheets in a menu](#integrate-stylesheets-in-a-menu)
+  - [Create new themes](#create-new-themes)
+  - [Export theme](#export-theme)
+  - [Density scale](#density-scale)
+  - [Troubleshoots](#troubleshoots)
+    - [QMenu](#qmenu)
 
 ## Install
 
