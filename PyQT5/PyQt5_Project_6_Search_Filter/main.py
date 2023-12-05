@@ -103,7 +103,7 @@ class DataFilterApp(QWidget):
     def update_filter(self, text):
         def contains_filter_text(value):
             return text.lower() in str(value).lower()
-        filtered_data = [item for item in self.data if any(contains_filter_text(value) for value in item.values())]
+        self.filtered_data = [item for item in self.data if any(contains_filter_text(value) for value in item.values())]
         self.table_widget.update_from_list(self.filtered_data)
     
     def print_selected_session(self):
