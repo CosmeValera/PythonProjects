@@ -5,19 +5,22 @@ from functools import partial
 from qtawesome import icon
 from qt_material import apply_stylesheet
 
+# MY PROJECT
 class MyTableWidget(QTableWidget):
     def __init__(self, parent, data):
         super().__init__(parent)
         self.setSelectionBehavior(QTableWidget.SelectRows)
-        self.itemClicked.connect(partial(self.select_session, parent))
+        self.cellClicked.connect(partial(self.select_session, parent))
         self.verticalHeader().sectionClicked.connect(self.row_header_clicked)
         self.itemSelectionChanged.connect(self.selection_changed)
 
         self.headers = ["Fav", "Element", "Workstation", "Protocol", "User"]
         self.setColumnCount(len(self.headers))
-        self.setColumnWidth(0, 70)
+        self.setColumnWidth(0, 80)
         self.setColumnWidth(1, 100)
-        self.setColumnWidth(2, 270)
+        self.setColumnWidth(2, 140)
+        self.setColumnWidth(3, 120)
+        self.setColumnWidth(4, 80)
         self.setHorizontalHeaderLabels(self.headers)
 
         self.data = data
@@ -94,6 +97,7 @@ class DataFilterApp(QWidget):
 
         self.setGeometry(100, 100, 800, 600)
         self.setWindowTitle('Data Filter App')
+        self.resize(1400,600)
         self.show()
 
     def update_filter(self, text):
