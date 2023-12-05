@@ -49,20 +49,12 @@ class MyTableWidget(QTableWidget):
         view.selected_session = self.data[selected_row_index]
 
     def row_header_clicked(self, selected_row_index):
-        # This method will be called when a row header is clicked
-        print(f"Row header clicked: {selected_row_index}")
-        # Set selected_session just like in select_session
-        parent_view = self.parent()
-        # selected_row_index = selected_row_index
-        parent_view.selected_session = self.data[selected_row_index]
+        self.parent().selected_session = self.data[selected_row_index]
 
-    
     def selection_changed(self):
         selected_items = self.selectedItems()
         if not selected_items:
-            # No selection, set session to None
-            parent_view = self.parent()
-            parent_view.selected_session = None
+            self.parent().selected_session = None
 
 class DataFilterApp(QWidget):
     def __init__(self):
@@ -105,7 +97,9 @@ class DataFilterApp(QWidget):
         self.show()
 
     def update_filter(self, text):
-        self.filtered_data = [item for item in self.data if text.lower() in str(item).lower()]
+        def contains_filter_text(value):
+            return text.lower() in str(value).lower()
+        filtered_data = [item for item in self.data if any(contains_filter_text(value) for value in item.values())]
         self.table_widget.update_from_list(self.filtered_data)
     
     def print_selected_session(self):
