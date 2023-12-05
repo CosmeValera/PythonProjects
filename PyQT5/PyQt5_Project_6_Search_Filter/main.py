@@ -9,7 +9,9 @@ class MyTableWidget(QTableWidget):
     def __init__(self, parent, data):
         super().__init__(parent)
         self.setSelectionBehavior(QTableWidget.SelectRows)
-        self.cellClicked.connect(partial(self.select_session, parent))
+        self.itemClicked.connect(partial(self.select_session, parent))
+        self.verticalHeader().sectionClicked.connect(self.row_header_clicked)
+        self.itemSelectionChanged.connect(self.selection_changed)
 
         self.headers = ["Fav", "Element", "Workstation", "Protocol", "User"]
         self.setColumnCount(len(self.headers))
@@ -20,7 +22,7 @@ class MyTableWidget(QTableWidget):
 
         self.data = data
         self.set_data()
-
+        
     def update_from_list(self, data_list):
         self.clearContents()
         self.data = data_list
@@ -45,6 +47,22 @@ class MyTableWidget(QTableWidget):
     def select_session(self, view):
         selected_row_index = self.selectedIndexes()[0].row()
         view.selected_session = self.data[selected_row_index]
+
+    def row_header_clicked(self, selected_row_index):
+        # This method will be called when a row header is clicked
+        print(f"Row header clicked: {selected_row_index}")
+        # Set selected_session just like in select_session
+        parent_view = self.parent()
+        # selected_row_index = selected_row_index
+        parent_view.selected_session = self.data[selected_row_index]
+
+    
+    def selection_changed(self):
+        selected_items = self.selectedItems()
+        if not selected_items:
+            # No selection, set session to None
+            parent_view = self.parent()
+            parent_view.selected_session = None
 
 class DataFilterApp(QWidget):
     def __init__(self):
