@@ -81,7 +81,7 @@ class DataFilterApp(QWidget):
         layout = QVBoxLayout()
 
         self.filter_input = QLineEdit(self)
-        self.filter_input.setPlaceholderText("Type to filter...")
+        self.filter_input.setPlaceholderText("Search...")
         self.filter_input.setClearButtonEnabled(True)
         search_icon = icon('fa.search', color='white')
         self.filter_input.addAction(search_icon, QLineEdit.LeadingPosition)
@@ -107,7 +107,7 @@ class DataFilterApp(QWidget):
 
         self.setGeometry(100, 100, 800, 600)
         self.setWindowTitle('Data Filter App')
-        self.resize(1400,600)
+        self.resize(700,400)
         self.show()
 
     def update_filter(self, text):
