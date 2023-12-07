@@ -1,5 +1,5 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QLineEdit, QTableWidget, QTableWidgetItem, QCheckBox, QPushButton
+from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QHBoxLayout, QLineEdit, QTableWidget, QTableWidgetItem, QPushButton, QSpacerItem, QSizePolicy
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPalette, QColor
 from functools import partial
@@ -80,26 +80,34 @@ class DataFilterApp(QWidget):
     def init_ui(self):
         layout = QVBoxLayout()
 
-        self.filter_input = QLineEdit(self)
-        self.filter_input.setPlaceholderText("Search...")
-        self.filter_input.setClearButtonEnabled(True)
+        # Create a horizontal layout to organize the filter_input and spacer
+        self.filter_layout = QHBoxLayout()
+
+        # Add a spacer on the left side to fill the space
+        spacer = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+        self.filter_layout.addItem(spacer)
+
+        filter_input = QLineEdit(self)
+        filter_input.setPlaceholderText("Search...")
+        filter_input.setClearButtonEnabled(True)
         search_icon = icon('fa.search', color='white')
-        self.filter_input.addAction(search_icon, QLineEdit.LeadingPosition)
-        self.filter_input.textChanged.connect(self.update_filter)
-        self.filter_input.setStyleSheet(self.filter_styles)
+        filter_input.addAction(search_icon, QLineEdit.LeadingPosition)
+        filter_input.textChanged.connect(self.update_filter)
+        filter_input.setStyleSheet(self.filter_styles)
 
         # Placeholder style
-        palette = self.filter_input.palette()
+        palette = filter_input.palette()
         palette.setColor(QPalette.PlaceholderText, QColor(255, 255, 255, 90))
-        self.filter_input.setPalette(palette)
+        filter_input.setPalette(palette)
 
+        self.filter_layout.addWidget(filter_input)
 
         self.table_widget = MyTableWidget(self, self.filtered_data)
         
         self.print_button = QPushButton("Print Selected Session", self)
         self.print_button.clicked.connect(self.print_selected_session)
 
-        layout.addWidget(self.filter_input)
+        layout.addLayout(self.filter_layout)
         layout.addWidget(self.table_widget)
         layout.addWidget(self.print_button)
 
