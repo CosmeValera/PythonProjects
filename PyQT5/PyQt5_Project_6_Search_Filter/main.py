@@ -1,9 +1,11 @@
 import sys
 from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QLineEdit, QTableWidget, QTableWidgetItem, QCheckBox, QPushButton
 from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QPalette, QColor
 from functools import partial
 from qtawesome import icon
 from qt_material import apply_stylesheet
+from guiStyles import FILTER_STYLES
 
 # MY PROJECT
 class MyTableWidget(QTableWidget):
@@ -62,6 +64,7 @@ class MyTableWidget(QTableWidget):
 class DataFilterApp(QWidget):
     def __init__(self):
         super().__init__()
+        self.filter_styles = FILTER_STYLES
         apply_stylesheet(self, theme="gmvTheme.xml")
 
         self.data = [
@@ -83,6 +86,13 @@ class DataFilterApp(QWidget):
         search_icon = icon('fa.search', color='white')
         self.filter_input.addAction(search_icon, QLineEdit.LeadingPosition)
         self.filter_input.textChanged.connect(self.update_filter)
+        self.filter_input.setStyleSheet(self.filter_styles)
+
+        # Placeholder style
+        palette = self.filter_input.palette()
+        palette.setColor(QPalette.PlaceholderText, QColor(255, 255, 255, 90))
+        self.filter_input.setPalette(palette)
+
 
         self.table_widget = MyTableWidget(self, self.filtered_data)
         
