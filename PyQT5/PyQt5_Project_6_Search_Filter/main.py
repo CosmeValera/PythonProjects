@@ -1,11 +1,27 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QHBoxLayout, QLineEdit, QTableWidget, QTableWidgetItem, QPushButton, QSpacerItem, QSizePolicy, QShortcut
+from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QHBoxLayout, QLineEdit, QTableWidget, QTableWidgetItem, QPushButton, QSpacerItem, QSizePolicy, QShortcut, QLabel, QStackedWidget
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPalette, QColor
 from functools import partial
 from qtawesome import icon
 from qt_material import apply_stylesheet
 from guiStyles import FILTER_STYLES
+
+class HomeWidget(QWidget):
+    def __init__(self, parent):
+        super().__init__(parent)
+        self.layout = QVBoxLayout()
+        self.table_widget = MyTableWidget(self, parent.filtered_data)
+        self.layout.addWidget(self.table_widget)
+        self.setLayout(self.layout)
+
+class SettingsWidget(QWidget):
+    def __init__(self, parent):
+        super().__init__(parent)
+        self.layout = QVBoxLayout()
+        self.label = QLabel("Settings works!")
+        self.layout.addWidget(self.label)
+        self.setLayout(self.layout)
 
 # MY PROJECT
 class MyTableWidget(QTableWidget):
@@ -94,7 +110,14 @@ class DataFilterApp(QWidget):
         self.init_ui()
 
     def init_ui(self):
-        layout = QVBoxLayout()
+        self.stacked_widget = QStackedWidget()
+        self.home_widget = HomeWidget(self)
+        self.settings_widget = SettingsWidget(self)
+
+        self.stacked_widget.addWidget(self.home_widget)
+        self.stacked_widget.addWidget(self.settings_widget)
+
+        self.layout = QVBoxLayout()
 
         ### LAYOUT ###
         # Create a horizontal layout to organize the filter_input and spacer
@@ -125,8 +148,14 @@ class DataFilterApp(QWidget):
         shortcut.activated.connect(lambda: self.setFocusOnFilterInput(filter_input))
         ### END: FILTER ###
 
+        ### MENU ###
+        self.menu_layout = QHBoxLayout()
+        self.menu_layout.addWidget(self.create_menu_button("Home", 0))
+        self.menu_layout.addWidget(self.create_menu_button("Settings", 1))
+        ### END: MENU ###
+
         ### TABLE ###
-        self.table_widget = MyTableWidget(self, self.filtered_data)
+        # self.table_widget = MyTableWidget(self, self.filtered_data)
         ### END: TABLE ###
         
         ### PRINT ###
@@ -136,17 +165,24 @@ class DataFilterApp(QWidget):
 
         ### Add layout ###
         self.filter_layout.addWidget(filter_input)
-        layout.addLayout(self.filter_layout)
-        layout.addWidget(self.table_widget)
-        layout.addWidget(self.print_button)
+        self.layout.addLayout(self.filter_layout)
+        self.layout.addLayout(self.menu_layout)
+        self.layout.addWidget(self.stacked_widget)
+        # self.layout.addWidget(self.table_widget)
+        self.layout.addWidget(self.print_button)
         ### Add layout ###
 
-        self.setLayout(layout)
+        self.setLayout(self.layout)
 
         self.setGeometry(100, 100, 800, 600)
         self.setWindowTitle('Data Filter App')
         self.resize(700,400)
         self.show()
+
+    def create_menu_button(self, text, index):
+        button = QPushButton(text, self)
+        button.clicked.connect(lambda: self.stacked_widget.setCurrentIndex(index))
+        return button
 
     def setFocusOnFilterInput(self, filter_input):
         self.table_widget.clearSelection()  # Clear table selection
