@@ -1,5 +1,5 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QHBoxLayout, QLineEdit, QTableWidget, QTableWidgetItem, QPushButton, QSpacerItem, QSizePolicy
+from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QHBoxLayout, QLineEdit, QTableWidget, QTableWidgetItem, QPushButton, QSpacerItem, QSizePolicy, QShortcut
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPalette, QColor
 from functools import partial
@@ -80,13 +80,16 @@ class DataFilterApp(QWidget):
     def init_ui(self):
         layout = QVBoxLayout()
 
+        ### LAYOUT ###
         # Create a horizontal layout to organize the filter_input and spacer
         self.filter_layout = QHBoxLayout()
 
         # Add a spacer on the left side to fill the space
         spacer = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
         self.filter_layout.addItem(spacer)
+        ### END: LAYOUT ###
 
+        ### FILTER ###
         filter_input = QLineEdit(self)
         filter_input.setPlaceholderText("Search...")
         filter_input.setClearButtonEnabled(True)
@@ -100,16 +103,26 @@ class DataFilterApp(QWidget):
         palette.setColor(QPalette.PlaceholderText, QColor(255, 255, 255, 90))
         filter_input.setPalette(palette)
 
-        self.filter_layout.addWidget(filter_input)
+        # Shortcut
+        shortcut = QShortcut("Ctrl+F", self)
+        shortcut.activated.connect(lambda: self.setFocusOnFilterInput(filter_input))
+        ### END: FILTER ###
 
+        ### TABLE ###
         self.table_widget = MyTableWidget(self, self.filtered_data)
+        ### END: TABLE ###
         
+        ### PRINT ###
         self.print_button = QPushButton("Print Selected Session", self)
         self.print_button.clicked.connect(self.print_selected_session)
+        ### END: PRINT ###
 
+        ### Add layout ###
+        self.filter_layout.addWidget(filter_input)
         layout.addLayout(self.filter_layout)
         layout.addWidget(self.table_widget)
         layout.addWidget(self.print_button)
+        ### Add layout ###
 
         self.setLayout(layout)
 
@@ -117,6 +130,10 @@ class DataFilterApp(QWidget):
         self.setWindowTitle('Data Filter App')
         self.resize(700,400)
         self.show()
+
+    def setFocusOnFilterInput(self, filter_input):
+        self.table_widget.clearSelection()  # Clear table selection
+        filter_input.setFocus()
 
     def update_filter(self, text):
         def contains_filter_text(value):
