@@ -48,6 +48,21 @@ class MyTableWidget(QTableWidget):
                 item = self.item(index, col)
                 if item:
                     item.setFlags(item.flags() & ~Qt.ItemIsEditable)
+            
+            # Highlight fav rows
+            if session.get("fav") is True:
+                for col in range(self.columnCount()):
+                    item = self.item(index, col)
+                    if item:
+                        item.setBackground(QColor(40, 0, 8))  # Yellow background
+                        # item.setForeground(QColor())  # Yellow background
+            # Highlight default row (User1)
+            if session.get("user") is "User1":
+                for col in range(self.columnCount()):
+                    item = self.item(index, col)
+                    if item:
+                        item.setBackground(QColor(8, 40, 8))  # Yellow background
+                        # item.setForeground(QColor())  # Yellow background
 
     def select_session(self, view):
         selected_row_index = self.selectedIndexes()[0].row()
@@ -68,10 +83,11 @@ class DataFilterApp(QWidget):
         apply_stylesheet(self, theme="gmvTheme.xml")
 
         self.data = [
-            {"fav": False, "elem": "Manzana", "ws": "WS1", "prot": "Protocol1", "user": "User1"},
-            {"fav": True, "elem": "Portatil", "ws": "WS2", "prot": "UDP", "user": "User2"},
-            {"fav": True, "elem": "Raqueta", "ws": "WS3", "prot": "TCPIP", "user": "Joan"},
-            {"fav": False, "elem": "Granada", "ws": "WS4", "prot": "IPV24", "user": "Helena"},
+            {"fav": False, "elem": "Caja", "ws": "WS1", "prot": "IPV48", "user": "Bohe"},
+            {"fav": False, "elem": "Manzana", "ws": "WS2", "prot": "Protocol1", "user": "User1"},
+            {"fav": True, "elem": "Portatil", "ws": "WS3", "prot": "UDP", "user": "User2"},
+            {"fav": False, "elem": "Raqueta", "ws": "WS4", "prot": "TCPIP", "user": "Joan"},
+            {"fav": True, "elem": "Granada", "ws": "WS5", "prot": "IPV24", "user": "Helena"},
         ]
         self.filtered_data = self.data.copy()
 
