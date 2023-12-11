@@ -15,7 +15,13 @@ BUTTON_STYLES = """
 FILTER_STYLES = """
     QLineEdit {
         color: #FFFFFF;
-        border-bottom: 1px solid #FFFFFF;
         background-color: #191919;
+        border-bottom: 1px solid #FFFFFF;
+    }
+    
+    QToolTip {
+        color: #999999;
+        background-color: #191919;
+        border: 1px solid #191919;
     }
 """

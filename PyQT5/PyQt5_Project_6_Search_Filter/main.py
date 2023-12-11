@@ -93,6 +93,7 @@ class DataFilterApp(QWidget):
         filter_input = QLineEdit(self)
         filter_input.setPlaceholderText("Search...")
         filter_input.setClearButtonEnabled(True)
+        filter_input.setToolTip("You can also use Ctrl + F to search")
         search_icon = icon('fa.search', color='white')
         filter_input.addAction(search_icon, QLineEdit.LeadingPosition)
         filter_input.textChanged.connect(self.update_filter)
