@@ -25,3 +25,7 @@ FILTER_STYLES = """
         border: 1px solid #191919;
     }
 """
+
+SIDEBAR_STYLES = """
+    background-color: #aabbcc;
+"""

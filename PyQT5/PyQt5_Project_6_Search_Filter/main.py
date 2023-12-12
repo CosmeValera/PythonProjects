@@ -5,7 +5,7 @@ from PyQt5.QtGui import QPalette, QColor
 from functools import partial
 from qtawesome import icon
 from qt_material import apply_stylesheet
-from guiStyles import FILTER_STYLES
+from guiStyles import FILTER_STYLES, SIDEBAR_STYLES
 
 # MY PROJECT
 class MyTableWidget(QTableWidget):
@@ -95,6 +95,7 @@ class SettingsWidget(QWidget):
 class HoverableSidebarWidget(QWidget):
     def __init__(self, buttons_emoji, buttons_text):
         super().__init__()
+        self.sidebar_styles = SIDEBAR_STYLES
         self.buttons_emoji = buttons_emoji
         self.buttons_text = buttons_text
         self.layout = QVBoxLayout(self)
@@ -104,6 +105,9 @@ class HoverableSidebarWidget(QWidget):
             self.layout.addWidget(button_text)
 
         self.layout.addStretch()
+
+        self.setStyleSheet(self.sidebar_styles)
+
         self.setLayout(self.layout)
 
     def enterEvent(self, event):
@@ -181,7 +185,9 @@ class DataFilterApp(QWidget):
         self.create_menu_button("Settings", "⚙️", 1)
 
         self.hoverable_menu = HoverableSidebarWidget(self.buttons_emoji, self.buttons_text)
+        self.hoverable_menu.setAutoFillBackground(True)
         ### END: MENU ###
+
 
         ### PRINT ###
         self.print_button = QPushButton("Print Selected Session", self)
