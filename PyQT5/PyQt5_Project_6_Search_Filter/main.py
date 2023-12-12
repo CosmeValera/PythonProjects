@@ -117,7 +117,8 @@ class DataFilterApp(QWidget):
         self.stacked_widget.addWidget(self.home_widget)
         self.stacked_widget.addWidget(self.settings_widget)
 
-        self.layout = QVBoxLayout()
+        self.layout = QHBoxLayout()
+        self.layout_content = QVBoxLayout()
 
         ### LAYOUT ###
         # Create a horizontal layout to organize the filter_input and spacer
@@ -149,7 +150,7 @@ class DataFilterApp(QWidget):
         ### END: FILTER ###
 
         ### MENU ###
-        self.menu_layout = QHBoxLayout()
+        self.menu_layout = QVBoxLayout()
         self.menu_layout.addWidget(self.create_menu_button("Home", 0))
         self.menu_layout.addWidget(self.create_menu_button("Settings", 1))
         ### END: MENU ###
@@ -164,12 +165,13 @@ class DataFilterApp(QWidget):
         ### END: PRINT ###
 
         ### Add layout ###
-        self.filter_layout.addWidget(filter_input)
-        self.layout.addLayout(self.filter_layout)
         self.layout.addLayout(self.menu_layout)
-        self.layout.addWidget(self.stacked_widget)
-        # self.layout.addWidget(self.table_widget)
-        self.layout.addWidget(self.print_button)
+        self.filter_layout.addWidget(filter_input)
+        self.layout_content.addLayout(self.filter_layout)
+        self.layout_content.addWidget(self.stacked_widget)
+        # self.layout_content.addWidget(self.table_widget)
+        self.layout_content.addWidget(self.print_button)
+        self.layout.addLayout(self.layout_content)
         ### Add layout ###
 
         self.setLayout(self.layout)
