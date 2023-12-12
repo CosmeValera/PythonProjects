@@ -91,7 +91,27 @@ class SettingsWidget(QWidget):
         self.label = QLabel("Settings works!")
         self.layout.addWidget(self.label)
         self.setLayout(self.layout)
-        
+
+class HoverableWidget(QWidget):
+    def __init__(self, layout, parent=None):
+        super().__init__(parent)
+        self.layout = layout
+        self.setLayout(self.layout)
+        self.parent = parent
+
+    def enterEvent(self, event):
+        # Show the text buttons when the layout is being hovered
+        self.parent.home_button_text.setVisible(True)
+        self.parent.settings_button_text.setVisible(True)
+        self.parent.home_button_emoji.setVisible(False)
+        self.parent.settings_button_emoji.setVisible(False)
+
+    def leaveEvent(self, event):
+        # Hide the text buttons when the layout is not being hovered
+        self.parent.home_button_text.setVisible(False)
+        self.parent.settings_button_text.setVisible(False)
+        self.parent.home_button_emoji.setVisible(True)
+        self.parent.settings_button_emoji.setVisible(True)
 
 class DataFilterApp(QWidget):
     def __init__(self):
@@ -163,6 +183,8 @@ class DataFilterApp(QWidget):
         self.menu_layout.addWidget(self.settings_button_emoji)
         self.menu_layout.addWidget(self.settings_button_text)
         self.menu_layout.addStretch()
+        self.hoverable_menu = HoverableWidget(self.menu_layout, self)
+        self.layout.addWidget(self.hoverable_menu)
         ### END: MENU ###
 
         ### TABLE ###
@@ -190,20 +212,6 @@ class DataFilterApp(QWidget):
         self.setWindowTitle('Data Filter App')
         self.resize(700,400)
         self.show()
-
-    def enterEvent(self, event):
-        # Show the text buttons when the layout is being hovered
-        self.home_button_text.setVisible(True)
-        self.settings_button_text.setVisible(True)
-        self.home_button_emoji.setVisible(False)
-        self.settings_button_emoji.setVisible(False)
-
-    def leaveEvent(self, event):
-        # Hide the text buttons when the layout is not being hovered
-        self.home_button_text.setVisible(False)
-        self.settings_button_text.setVisible(False)
-        self.home_button_emoji.setVisible(True)
-        self.settings_button_emoji.setVisible(True)
 
     def create_menu_button(self, text, emoji, index):
         button = HoverTextButton(text, emoji, self)
