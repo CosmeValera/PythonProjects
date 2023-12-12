@@ -91,21 +91,7 @@ class SettingsWidget(QWidget):
         self.label = QLabel("Settings works!")
         self.layout.addWidget(self.label)
         self.setLayout(self.layout)
-
-class HoverTextButton(QPushButton):
-    def __init__(self, text, emoji, parent=None):
-        super().__init__(text, parent)
-        self.emoji = emoji
-        self.normal_text = text
-        self.is_hovered = False
-        self.setText(self.emoji)
-
-    def enterEvent(self, event):
-        self.setText(self.emoji + ' ' + self.normal_text)
-
-    def leaveEvent(self, event):
-        self.setText(self.emoji)
-
+        
 
 class DataFilterApp(QWidget):
     def __init__(self):
@@ -166,8 +152,16 @@ class DataFilterApp(QWidget):
 
         ### MENU ###
         self.menu_layout = QVBoxLayout()
-        self.menu_layout.addWidget(self.create_menu_button("Home", "🏠", 0))
-        self.menu_layout.addWidget(self.create_menu_button("Settings", "⚙️", 1))
+        self.home_button_emoji = QPushButton("🏠", self)
+        self.home_button_text = QPushButton("🏠 Home", self)
+        self.home_button_text.setVisible(False)
+        self.settings_button_emoji = QPushButton("⚙️", self)
+        self.settings_button_text = QPushButton("⚙️ Settings", self)
+        self.settings_button_text.setVisible(False)
+        self.menu_layout.addWidget(self.home_button_emoji)
+        self.menu_layout.addWidget(self.home_button_text)
+        self.menu_layout.addWidget(self.settings_button_emoji)
+        self.menu_layout.addWidget(self.settings_button_text)
         self.menu_layout.addStretch()
         ### END: MENU ###
 
@@ -196,6 +190,20 @@ class DataFilterApp(QWidget):
         self.setWindowTitle('Data Filter App')
         self.resize(700,400)
         self.show()
+
+    def enterEvent(self, event):
+        # Show the text buttons when the layout is being hovered
+        self.home_button_text.setVisible(True)
+        self.settings_button_text.setVisible(True)
+        self.home_button_emoji.setVisible(False)
+        self.settings_button_emoji.setVisible(False)
+
+    def leaveEvent(self, event):
+        # Hide the text buttons when the layout is not being hovered
+        self.home_button_text.setVisible(False)
+        self.settings_button_text.setVisible(False)
+        self.home_button_emoji.setVisible(True)
+        self.settings_button_emoji.setVisible(True)
 
     def create_menu_button(self, text, emoji, index):
         button = HoverTextButton(text, emoji, self)
