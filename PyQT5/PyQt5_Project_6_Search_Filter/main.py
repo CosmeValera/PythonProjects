@@ -172,18 +172,26 @@ class DataFilterApp(QWidget):
 
         ### MENU ###
         self.menu_layout = QVBoxLayout()
+        
         self.home_button_emoji = QPushButton("🏠", self)
         self.home_button_text = QPushButton("🏠 Home", self)
         self.home_button_text.setVisible(False)
+        self.home_button_emoji.clicked.connect(lambda: self.stacked_widget.setCurrentIndex(0))
+        self.home_button_text.clicked.connect(lambda: self.stacked_widget.setCurrentIndex(0))
+        self.menu_layout.addWidget(self.home_button_emoji)
+        self.menu_layout.addWidget(self.home_button_text)
+
         self.settings_button_emoji = QPushButton("⚙️", self)
         self.settings_button_text = QPushButton("⚙️ Settings", self)
         self.settings_button_text.setVisible(False)
-        self.menu_layout.addWidget(self.home_button_emoji)
-        self.menu_layout.addWidget(self.home_button_text)
+        self.settings_button_emoji.clicked.connect(lambda: self.stacked_widget.setCurrentIndex(1))
+        self.settings_button_text.clicked.connect(lambda: self.stacked_widget.setCurrentIndex(1))
         self.menu_layout.addWidget(self.settings_button_emoji)
         self.menu_layout.addWidget(self.settings_button_text)
+
         self.menu_layout.addStretch()
         self.hoverable_menu = HoverableWidget(self.menu_layout, self)
+
         self.layout.addWidget(self.hoverable_menu)
         ### END: MENU ###
 
@@ -214,9 +222,13 @@ class DataFilterApp(QWidget):
         self.show()
 
     def create_menu_button(self, text, emoji, index):
-        button = HoverTextButton(text, emoji, self)
-        button.clicked.connect(lambda: self.stacked_widget.setCurrentIndex(index))
-        return button
+        home_button_emoji = QPushButton("🏠", self)
+        home_button_text = QPushButton("🏠 Home", self)
+        home_button_text.setVisible(False)
+        home_button_emoji.clicked.connect(lambda: self.stacked_widget.setCurrentIndex(index))
+        home_button_text.clicked.connect(lambda: self.stacked_widget.setCurrentIndex(index))
+        self.menu_layout.addWidget(home_button_emoji)
+        self.menu_layout.addWidget(home_button_text)
 
 
     def setFocusOnFilterInput(self, filter_input):
