@@ -92,12 +92,19 @@ class SettingsWidget(QWidget):
         self.layout.addWidget(self.label)
         self.setLayout(self.layout)
 
-class HoverableWidget(QWidget):
-    def __init__(self, buttons_emoji, buttons_text, layout):
+class HoverableSidebarWidget(QWidget):
+    def __init__(self, buttons_emoji, buttons_text):
         super().__init__()
-        self.setLayout(layout)
         self.buttons_emoji = buttons_emoji
         self.buttons_text = buttons_text
+        self.layout = QVBoxLayout(self)
+
+        for button_emoji, button_text in zip(buttons_emoji, buttons_text):
+            self.layout.addWidget(button_emoji)
+            self.layout.addWidget(button_text)
+
+        self.layout.addStretch()
+        self.setLayout(self.layout)
 
     def enterEvent(self, event):
         for button_text in self.buttons_text:
@@ -169,16 +176,11 @@ class DataFilterApp(QWidget):
         ### END: FILTER ###
 
         ### MENU ###
-        self.menu_layout = QVBoxLayout()
-
         self.buttons_emoji, self.buttons_text = [], []
         self.create_menu_button("Home", "🏠", 0)
         self.create_menu_button("Settings", "⚙️", 1)
 
-        self.menu_layout.addStretch()
-        self.hoverable_menu = HoverableWidget(self.buttons_emoji, self.buttons_text, self.menu_layout)
-
-        self.layout.addWidget(self.hoverable_menu)
+        self.hoverable_menu = HoverableSidebarWidget(self.buttons_emoji, self.buttons_text)
         ### END: MENU ###
 
         ### PRINT ###
@@ -187,15 +189,15 @@ class DataFilterApp(QWidget):
         ### END: PRINT ###
 
         ### Add layout ###
-        self.layout.addLayout(self.menu_layout)
+        self.layout.addWidget(self.hoverable_menu)
         self.filter_layout.addWidget(filter_input)
         self.layout_content.addLayout(self.filter_layout)
         self.layout_content.addWidget(self.stacked_widget)
         self.layout_content.addWidget(self.print_button)
         self.layout.addLayout(self.layout_content)
-        ### Add layout ###
 
         self.setLayout(self.layout)
+        ### Add layout ###
 
         self.setGeometry(100, 100, 800, 600)
         self.setWindowTitle('Data Filter App')
@@ -208,8 +210,6 @@ class DataFilterApp(QWidget):
         button_text.setVisible(False)
         button_emoji.clicked.connect(lambda: self.stacked_widget.setCurrentIndex(index))
         button_text.clicked.connect(lambda: self.stacked_widget.setCurrentIndex(index))
-        self.menu_layout.addWidget(button_emoji)
-        self.menu_layout.addWidget(button_text)
         self.buttons_emoji.append(button_emoji)
         self.buttons_text.append(button_text)
 
