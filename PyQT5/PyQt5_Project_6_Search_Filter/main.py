@@ -153,6 +153,7 @@ class DataFilterApp(QWidget):
         self.menu_layout = QVBoxLayout()
         self.menu_layout.addWidget(self.create_menu_button("Home", 0))
         self.menu_layout.addWidget(self.create_menu_button("Settings", 1))
+        self.menu_layout.addStretch()
         ### END: MENU ###
 
         ### TABLE ###
