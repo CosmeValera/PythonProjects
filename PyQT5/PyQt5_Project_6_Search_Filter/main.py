@@ -5,7 +5,7 @@ from PyQt5.QtGui import QPalette, QColor
 from functools import partial
 from qtawesome import icon
 from qt_material import apply_stylesheet
-from guiStyles import FILTER_STYLES, SIDEBAR_STYLES
+from guiStyles import FILTER_STYLES, SIDEBAR_STYLES, SIDEBAR_BUTTON_STYLES
 
 # MY PROJECT
 class MyTableWidget(QTableWidget):
@@ -95,7 +95,6 @@ class SettingsWidget(QWidget):
 class HoverableSidebarWidget(QWidget):
     def __init__(self, buttons_emoji, buttons_text):
         super().__init__()
-        self.sidebar_styles = SIDEBAR_STYLES
         self.buttons_emoji = buttons_emoji
         self.buttons_text = buttons_text
         self.layout = QVBoxLayout(self)
@@ -105,9 +104,7 @@ class HoverableSidebarWidget(QWidget):
             self.layout.addWidget(button_text)
 
         self.layout.addStretch()
-
-        self.setStyleSheet(self.sidebar_styles)
-
+        
         self.setLayout(self.layout)
 
     def enterEvent(self, event):
@@ -126,6 +123,8 @@ class DataFilterApp(QWidget):
     def __init__(self):
         super().__init__()
         self.filter_styles = FILTER_STYLES
+        self.sidebar_styles = SIDEBAR_STYLES
+        self.sidebar_button_styles = SIDEBAR_BUTTON_STYLES
         apply_stylesheet(self, theme="gmvTheme.xml")
 
         self.data = [
@@ -180,14 +179,15 @@ class DataFilterApp(QWidget):
         ### END: FILTER ###
 
         ### MENU ###
-        self.buttons_emoji, self.buttons_text = [], []
+        self.buttons_emoji = []
+        self.buttons_text = []
         self.create_menu_button("Home", "🏠", 0)
         self.create_menu_button("Settings", "⚙️", 1)
 
         self.hoverable_menu = HoverableSidebarWidget(self.buttons_emoji, self.buttons_text)
-        self.hoverable_menu.setAutoFillBackground(True)
+        self.hoverable_menu.setAttribute(Qt.WA_StyledBackground, True)
+        self.hoverable_menu.setStyleSheet(self.sidebar_styles)
         ### END: MENU ###
-
 
         ### PRINT ###
         self.print_button = QPushButton("Print Selected Session", self)
@@ -203,11 +203,11 @@ class DataFilterApp(QWidget):
         self.layout.addLayout(self.layout_content)
 
         self.setLayout(self.layout)
-        ### Add layout ###
+        ### END: Add layout ###
 
         self.setGeometry(100, 100, 800, 600)
         self.setWindowTitle('Data Filter App')
-        self.resize(700,400)
+        self.resize(800,400)
         self.show()
 
     def create_menu_button(self, text, emoji, index):
@@ -216,6 +216,8 @@ class DataFilterApp(QWidget):
         button_text.setVisible(False)
         button_emoji.clicked.connect(lambda: self.stacked_widget.setCurrentIndex(index))
         button_text.clicked.connect(lambda: self.stacked_widget.setCurrentIndex(index))
+        button_emoji.setStyleSheet(self.sidebar_button_styles)
+        button_text.setStyleSheet(self.sidebar_button_styles)
         self.buttons_emoji.append(button_emoji)
         self.buttons_text.append(button_text)
 
