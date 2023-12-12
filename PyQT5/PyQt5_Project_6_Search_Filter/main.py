@@ -92,6 +92,21 @@ class SettingsWidget(QWidget):
         self.layout.addWidget(self.label)
         self.setLayout(self.layout)
 
+class HoverTextButton(QPushButton):
+    def __init__(self, text, emoji, parent=None):
+        super().__init__(text, parent)
+        self.emoji = emoji
+        self.normal_text = text
+        self.is_hovered = False
+        self.setText(self.emoji)
+
+    def enterEvent(self, event):
+        self.setText(self.emoji + ' ' + self.normal_text)
+
+    def leaveEvent(self, event):
+        self.setText(self.emoji)
+
+
 class DataFilterApp(QWidget):
     def __init__(self):
         super().__init__()
@@ -151,8 +166,8 @@ class DataFilterApp(QWidget):
 
         ### MENU ###
         self.menu_layout = QVBoxLayout()
-        self.menu_layout.addWidget(self.create_menu_button("🏠 Home", 0))
-        self.menu_layout.addWidget(self.create_menu_button("⚙️ Settings", 1))
+        self.menu_layout.addWidget(self.create_menu_button("Home", "🏠", 0))
+        self.menu_layout.addWidget(self.create_menu_button("Settings", "⚙️", 1))
         self.menu_layout.addStretch()
         ### END: MENU ###
 
@@ -182,10 +197,11 @@ class DataFilterApp(QWidget):
         self.resize(700,400)
         self.show()
 
-    def create_menu_button(self, text, index):
-        button = QPushButton(text, self)
+    def create_menu_button(self, text, emoji, index):
+        button = HoverTextButton(text, emoji, self)
         button.clicked.connect(lambda: self.stacked_widget.setCurrentIndex(index))
         return button
+
 
     def setFocusOnFilterInput(self, filter_input):
         self.table_widget.clearSelection()  # Clear table selection
