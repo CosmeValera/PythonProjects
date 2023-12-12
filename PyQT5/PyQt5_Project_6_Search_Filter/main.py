@@ -7,22 +7,6 @@ from qtawesome import icon
 from qt_material import apply_stylesheet
 from guiStyles import FILTER_STYLES
 
-class HomeWidget(QWidget):
-    def __init__(self, parent):
-        super().__init__(parent)
-        self.layout = QVBoxLayout()
-        self.table_widget = MyTableWidget(self, parent.filtered_data)
-        self.layout.addWidget(self.table_widget)
-        self.setLayout(self.layout)
-
-class SettingsWidget(QWidget):
-    def __init__(self, parent):
-        super().__init__(parent)
-        self.layout = QVBoxLayout()
-        self.label = QLabel("Settings works!")
-        self.layout.addWidget(self.label)
-        self.setLayout(self.layout)
-
 # MY PROJECT
 class MyTableWidget(QTableWidget):
     def __init__(self, parent, data):
@@ -92,6 +76,22 @@ class MyTableWidget(QTableWidget):
         if not selected_items:
             self.parent().selected_session = None
 
+class HomeWidget(QWidget):
+    def __init__(self, parent):
+        super().__init__(parent)
+        self.layout = QVBoxLayout()
+        self.table_widget = MyTableWidget(self, parent.filtered_data)
+        self.layout.addWidget(self.table_widget)
+        self.setLayout(self.layout)
+
+class SettingsWidget(QWidget):
+    def __init__(self, parent):
+        super().__init__(parent)
+        self.layout = QVBoxLayout()
+        self.label = QLabel("Settings works!")
+        self.layout.addWidget(self.label)
+        self.setLayout(self.layout)
+
 class DataFilterApp(QWidget):
     def __init__(self):
         super().__init__()
@@ -151,8 +151,8 @@ class DataFilterApp(QWidget):
 
         ### MENU ###
         self.menu_layout = QVBoxLayout()
-        self.menu_layout.addWidget(self.create_menu_button("Home", 0))
-        self.menu_layout.addWidget(self.create_menu_button("Settings", 1))
+        self.menu_layout.addWidget(self.create_menu_button("🏠 Home", 0))
+        self.menu_layout.addWidget(self.create_menu_button("⚙️ Settings", 1))
         self.menu_layout.addStretch()
         ### END: MENU ###
 
