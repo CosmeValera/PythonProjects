@@ -1,0 +1,28 @@
+body {
+    // GMV colors
+    --gmv-primary-red: #DF0024;
+    --gmv-primary-black: #191919;
+    --gmv-primary-white: #F6F6F6;
+  
+    --gmv-secondary-red: #860015;
+    --gmv-secondary-black: #252525;
+    --gmv-secondary-gray: #373737;
+  
+    --gmv-other-yellow: #F9B235;
+    --gmv-other-orange: #FA6400;
+    --gmv-other-green: #21CB38;
+    
+    --gmv-text-white: #F6F6F6;
+    --gmv-text-gray: #999999;
+    --gmv-text-black: #434343;
+    --gmv-text-red: #DF0024;
+}
+
+div.trycolor {
+    color-de-fondo: #252525;
+    color-de-sidebar: #191919;
+    color-fav: rgb(223, 0, 36, 0.25);
+    color-mi-sesion: rgb(33, 203, 56, 0.25);
+    color-mi-sesion2: rgb(249, 178, 53, 0.25);
+    color-mi-sesion3: rgb(250, 100, 0, 0.25);
+}

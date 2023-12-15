@@ -55,15 +55,15 @@ class MyTableWidget(QTableWidget):
                 for col in range(self.columnCount()):
                     item = self.item(index, col)
                     if item:
-                        item.setBackground(QColor(40, 0, 8))  # Yellow background
-                        # item.setForeground(QColor())  # Yellow background
+                        item.setBackground(QColor(33, 203, 56, 26))
+                        # item.setForeground(QColor())
             # Highlight default row (User1)
             if session.get("user") is "User1":
                 for col in range(self.columnCount()):
                     item = self.item(index, col)
                     if item:
-                        item.setBackground(QColor(8, 40, 8))  # Yellow background
-                        # item.setForeground(QColor())  # Yellow background
+                        item.setBackground(QColor(249, 178, 53, 26))
+                        # item.setForeground(QColor())
 
     def select_session(self, view):
         selected_row_index = self.selectedIndexes()[0].row()
