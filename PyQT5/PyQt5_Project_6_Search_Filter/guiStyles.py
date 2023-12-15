@@ -14,9 +14,9 @@ BUTTON_STYLES = """
 
 FILTER_STYLES = """
     QLineEdit {
-        color: #F6F6F6;
+        color: #FFFFFF;
         background-color: #191919;
-        border-bottom: 1px solid #F6F6F6;
+        border-bottom: 1px solid #FFFFFF;
     }
     
     QToolTip {
@@ -29,6 +29,7 @@ FILTER_STYLES = """
 SIDEBAR_STYLES = """
     background-color: #191919;
 """
+
 SIDEBAR_BUTTON_STYLES = """
     QPushButton {
         color: #F6F6F6;
@@ -40,4 +41,8 @@ SIDEBAR_BUTTON_STYLES = """
         background-color: #252525;
         border: none;
     }
+"""
+
+SEPARATOR_STYLES = """
+    background-color: #343434;
 """

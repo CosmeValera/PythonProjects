@@ -1,11 +1,12 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QHBoxLayout, QLineEdit, QTableWidget, QTableWidgetItem, QPushButton, QSpacerItem, QSizePolicy, QShortcut, QLabel, QStackedWidget
+from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QHBoxLayout, QLineEdit, QTableWidget, QTableWidgetItem, QPushButton, QSpacerItem, QSizePolicy, QShortcut, QLabel, QStackedWidget, QFrame
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPalette, QColor
+from PyQt5.QtSvg import QSvgWidget
 from functools import partial
 from qtawesome import icon
 from qt_material import apply_stylesheet
-from guiStyles import FILTER_STYLES, SIDEBAR_STYLES, SIDEBAR_BUTTON_STYLES
+from guiStyles import FILTER_STYLES, SIDEBAR_STYLES, SIDEBAR_BUTTON_STYLES, SEPARATOR_STYLES
 
 # MY PROJECT
 class MyTableWidget(QTableWidget):
@@ -80,8 +81,11 @@ class HomeWidget(QWidget):
     def __init__(self, parent):
         super().__init__(parent)
         self.layout = QVBoxLayout()
-        self.table_widget = MyTableWidget(self, parent.filtered_data)
-        self.layout.addWidget(self.table_widget)
+        # self.table_widget = MyTableWidget(self, parent.filtered_data)
+        # self.layout.addWidget(self.table_widget)
+        # self.setLayout(self.layout)
+        self.label = QLabel("Home works!")
+        self.layout.addWidget(self.label)
         self.setLayout(self.layout)
 
 class SettingsWidget(QWidget):
@@ -92,32 +96,58 @@ class SettingsWidget(QWidget):
         self.layout.addWidget(self.label)
         self.setLayout(self.layout)
 
-class HoverableSidebarWidget(QWidget):
-    def __init__(self, buttons_emoji, buttons_text):
+class SidebarWidget(QWidget):
+    # Each option has 2 buttons: Icon and Icon + text
+    def __init__(self, buttons_icon, buttons_text):
         super().__init__()
-        self.buttons_emoji = buttons_emoji
+        self.separator_styles = SEPARATOR_STYLES
+        self.buttons_icon = buttons_icon
         self.buttons_text = buttons_text
         self.layout = QVBoxLayout(self)
+        self.initUi()
 
-        for button_emoji, button_text in zip(buttons_emoji, buttons_text):
-            self.layout.addWidget(button_emoji)
-            self.layout.addWidget(button_text)
-
+    def initUi(self):
+        self.insertLogo()
+        self.insertSeparator()
+        self.insertButtons()
         self.layout.addStretch()
-        
         self.setLayout(self.layout)
+
+    def insertLogo(self):
+        logo_container = QWidget()
+        logo_layout = QHBoxLayout()
+        logo_svg = QSvgWidget('logo.svg')
+        logo_svg.setFixedSize(38, 14)
+        logo_layout.addWidget(logo_svg)
+        logo_layout.setAlignment(Qt.AlignCenter)
+        logo_container.setLayout(logo_layout)
+
+        self.layout.addWidget(logo_container)
+
+    def insertSeparator(self):
+        line_separator = QFrame()
+        line_separator.setFrameShape(QFrame.HLine)
+        line_separator.setFrameShadow(QFrame.Sunken)
+        line_separator.setStyleSheet(self.separator_styles)
+
+        self.layout.addWidget(line_separator)
+
+    def insertButtons(self):
+        for button_icon, button_text in zip(self.buttons_icon, self.buttons_text):
+            self.layout.addWidget(button_icon)
+            self.layout.addWidget(button_text)
 
     def enterEvent(self, event):
         for button_text in self.buttons_text:
             button_text.setVisible(True)
-        for button_emoji in self.buttons_emoji:
-            button_emoji.setVisible(False)
+        for button_icon in self.buttons_icon:
+            button_icon.setVisible(False)
 
     def leaveEvent(self, event):
         for button_text in self.buttons_text:
             button_text.setVisible(False)
-        for button_emoji in self.buttons_emoji:
-            button_emoji.setVisible(True)
+        for button_icon in self.buttons_icon:
+            button_icon.setVisible(True)
 
 class DataFilterApp(QWidget):
     def __init__(self):
@@ -184,7 +214,7 @@ class DataFilterApp(QWidget):
         self.create_menu_button("Home", "🏠", 0)
         self.create_menu_button("Settings", "⚙️", 1)
 
-        self.hoverable_menu = HoverableSidebarWidget(self.buttons_emoji, self.buttons_text)
+        self.hoverable_menu = SidebarWidget(self.buttons_emoji, self.buttons_text)
         self.hoverable_menu.setAttribute(Qt.WA_StyledBackground, True)
         self.hoverable_menu.setStyleSheet(self.sidebar_styles)
         ### END: MENU ###

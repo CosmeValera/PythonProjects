@@ -70,3 +70,6 @@ Open a terminal in the project folder and run the following command:
 python app.py
 ```
 This command will execute your PyQt5 application, and you should see the GUI you designed in Qt Designer.
+
+
+##### PyQt5_Project_6_Search_Filter is the main project
