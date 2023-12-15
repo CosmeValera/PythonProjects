@@ -1,5 +1,7 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QHBoxLayout, QLineEdit, QTableWidget, QTableWidgetItem, QPushButton, QSpacerItem, QSizePolicy, QShortcut, QLabel, QStackedWidget, QFrame
+from PyQt5.QtWidgets import (QApplication, QWidget, QVBoxLayout, QHBoxLayout, QLineEdit, QTableWidget,
+QTableWidgetItem, QPushButton, QSpacerItem, QSizePolicy, QShortcut, QLabel, QStackedWidget, QFrame,
+QCheckBox)
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPalette, QColor
 from PyQt5.QtSvg import QSvgWidget
@@ -37,12 +39,19 @@ class MyTableWidget(QTableWidget):
     def set_data(self):
         self.setRowCount(len(self.data))
         for index, session in enumerate(self.data):
+            # 0 fav
+            # self.setCellWidget(index, 0, checkBox)
+
             # Display data in table (modify as needed)
-            self.setItem(index, 0, QTableWidgetItem(str(session.get("fav", ""))))
-            self.setItem(index, 1, QTableWidgetItem(str(session.get("elem", ""))))
-            self.setItem(index, 2, QTableWidgetItem(str(session.get("ws", ""))))
-            self.setItem(index, 3, QTableWidgetItem(str(session.get("prot", ""))))
-            self.setItem(index, 4, QTableWidgetItem(str(session.get("user", ""))))
+            checkBox = QCheckBox()
+            checkBox.setChecked(session.get("fav"))
+            checkItem = QTableWidgetItem()
+            checkItem.setData(Qt.CheckStateRole, Qt.Checked if session.get("fav") else Qt.Unchecked)
+            self.setItem(index, 0, checkItem)
+            self.setItem(index, 1, QTableWidgetItem(str(session.get("elem"))))
+            self.setItem(index, 2, QTableWidgetItem(str(session.get("ws"))))
+            self.setItem(index, 3, QTableWidgetItem(str(session.get("prot"))))
+            self.setItem(index, 4, QTableWidgetItem(str(session.get("user"))))
             
             # Set items as read-only
             for col in range(self.columnCount()):
