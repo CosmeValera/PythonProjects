@@ -81,11 +81,8 @@ class HomeWidget(QWidget):
     def __init__(self, parent):
         super().__init__(parent)
         self.layout = QVBoxLayout()
-        # self.table_widget = MyTableWidget(self, parent.filtered_data)
-        # self.layout.addWidget(self.table_widget)
-        # self.setLayout(self.layout)
-        self.label = QLabel("Home works!")
-        self.layout.addWidget(self.label)
+        self.table_widget = MyTableWidget(self, parent.filtered_data)
+        self.layout.addWidget(self.table_widget)
         self.setLayout(self.layout)
 
 class SettingsWidget(QWidget):
@@ -211,7 +208,7 @@ class DataFilterApp(QWidget):
         ### MENU ###
         self.buttons_emoji = []
         self.buttons_text = []
-        self.create_menu_button("Home", "🏠", 0)
+        self.create_menu_button("C2WS", "🏠", 0)
         self.create_menu_button("Settings", "⚙️", 1)
 
         self.hoverable_menu = SidebarWidget(self.buttons_emoji, self.buttons_text)
@@ -269,5 +266,5 @@ class DataFilterApp(QWidget):
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    DataFilterApp()
+    data_filter_app = DataFilterApp()
     sys.exit(app.exec_())
