@@ -55,14 +55,14 @@ class MyTableWidget(QTableWidget):
                 for col in range(self.columnCount()):
                     item = self.item(index, col)
                     if item:
-                        item.setBackground(QColor(33, 203, 56, 26))
+                        item.setBackground(QColor(223, 0, 36, 26))
                         # item.setForeground(QColor())
             # Highlight default row (User1)
             if session.get("user") is "User1":
                 for col in range(self.columnCount()):
                     item = self.item(index, col)
                     if item:
-                        item.setBackground(QColor(249, 178, 53, 26))
+                        item.setBackground(QColor(246, 246, 246, 26))
                         # item.setForeground(QColor())
 
     def select_session(self, view):
