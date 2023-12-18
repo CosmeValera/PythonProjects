@@ -180,6 +180,10 @@ class DataFilterApp(QWidget):
         self.init_ui()
 
     def init_ui(self):
+        ### Page layout ###
+        self.layout = QHBoxLayout()
+        self.layout_content = QVBoxLayout()
+
         self.stacked_widget = QStackedWidget()
         self.home_widget = HomeWidget(self)
         self.settings_widget = SettingsWidget(self)
@@ -187,17 +191,26 @@ class DataFilterApp(QWidget):
         self.stacked_widget.addWidget(self.home_widget)
         self.stacked_widget.addWidget(self.settings_widget)
 
-        self.layout = QHBoxLayout()
-        self.layout_content = QVBoxLayout()
+        ### END: Page layout ###
 
-        ### LAYOUT ###
-        # Create a horizontal layout to organize the filter_input and spacer
+        ### Filter layout ###
+        # Create a horizontal layout to organize the spacer, filter_input and  user_info_layout
         self.filter_layout = QHBoxLayout()
+        self.filter_layout.setContentsMargins(0, 0, 0, 5)
 
         # Add a spacer on the left side to fill the space
         spacer = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
-        self.filter_layout.addItem(spacer)
-        ### END: LAYOUT ###
+
+        # New user info layout
+        user_info_layout = QVBoxLayout()
+        user_icon = QLabel(self)
+        user_icon.setPixmap(icon('fa.user', color='#999999').pixmap(24, 24))
+        user_label = QLabel(self.ldap_user)
+
+        # Add user icon and label to the layout
+        user_info_layout.addWidget(user_icon, alignment=Qt.AlignCenter)
+        user_info_layout.addWidget(user_label, alignment=Qt.AlignCenter)
+        ### END: Filter layout ###
 
         ### FILTER ###
         filter_input = QLineEdit(self)
@@ -217,20 +230,6 @@ class DataFilterApp(QWidget):
         # Shortcut
         shortcut = QShortcut("Ctrl+F", self)
         shortcut.activated.connect(lambda: self.setFocusOnFilterInput(filter_input))
-
-        # New user info layout
-        user_info_layout = QVBoxLayout()
-        user_icon = QLabel(self)
-        user_icon.setPixmap(icon('fa.user', color='#999999').pixmap(24, 24))
-        user_label = QLabel(self.ldap_user)
-
-        # Add user icon and label to the layout
-        user_info_layout.addWidget(user_icon, alignment=Qt.AlignCenter)
-        user_info_layout.addWidget(user_label, alignment=Qt.AlignCenter)
-
-        # Add filter input and user info layout to the horizontal filter layout
-        self.filter_layout.addWidget(filter_input)
-        self.filter_layout.addLayout(user_info_layout)
         ### END: FILTER ###
 
         ### MENU ###
@@ -251,11 +250,15 @@ class DataFilterApp(QWidget):
 
 
         ### Add layout ###
-        self.layout.addWidget(self.hoverable_menu)
+        self.filter_layout.addItem(spacer)
         self.filter_layout.addWidget(filter_input)
+        self.filter_layout.addLayout(user_info_layout)
+
         self.layout_content.addLayout(self.filter_layout)
         self.layout_content.addWidget(self.stacked_widget)
         self.layout_content.addWidget(self.print_button)
+
+        self.layout.addWidget(self.hoverable_menu)
         self.layout.addLayout(self.layout_content)
 
         self.setLayout(self.layout)
