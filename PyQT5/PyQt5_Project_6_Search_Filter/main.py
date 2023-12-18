@@ -12,6 +12,9 @@ from guiStyles import FILTER_STYLES, SIDEBAR_STYLES, SIDEBAR_BUTTON_STYLES, SEPA
 
 # MY PROJECT
 class MyTableWidget(QTableWidget):
+    FIRST_COLUMN_WIDTH = 70
+    CHECKBOX_SIZE = 20
+
     def __init__(self, parent, data):
         super().__init__(parent)
         self.setSelectionBehavior(QTableWidget.SelectRows)
@@ -21,7 +24,7 @@ class MyTableWidget(QTableWidget):
 
         self.headers = ["Fav", "Element", "Workstation", "Protocol", "User"]
         self.setColumnCount(len(self.headers))
-        self.setColumnWidth(0, 80)
+        self.setColumnWidth(0, self.FIRST_COLUMN_WIDTH)
         self.setColumnWidth(1, 100)
         self.setColumnWidth(2, 140)
         self.setColumnWidth(3, 120)
@@ -40,14 +43,14 @@ class MyTableWidget(QTableWidget):
         self.setRowCount(len(self.data))
         for index, session in enumerate(self.data):
             # 0 fav
-            # self.setCellWidget(index, 0, checkBox)
-
-            # Display data in table (modify as needed)
             checkBox = QCheckBox()
             checkBox.setChecked(session.get("fav"))
-            checkItem = QTableWidgetItem()
-            checkItem.setData(Qt.CheckStateRole, Qt.Checked if session.get("fav") else Qt.Unchecked)
-            self.setItem(index, 0, checkItem)
+
+            checkbox_padding = self.FIRST_COLUMN_WIDTH // 2 - self.CHECKBOX_SIZE // 2
+            checkBox.setStyleSheet(f"QCheckBox {{ padding-left: {checkbox_padding}px; }}")
+
+            self.setCellWidget(index, 0, checkBox)
+            self.setItem(index, 0, QTableWidgetItem())
             self.setItem(index, 1, QTableWidgetItem(str(session.get("elem"))))
             self.setItem(index, 2, QTableWidgetItem(str(session.get("ws"))))
             self.setItem(index, 3, QTableWidgetItem(str(session.get("prot"))))
@@ -66,6 +69,7 @@ class MyTableWidget(QTableWidget):
                     if item:
                         item.setBackground(QColor(223, 0, 36, 26))
                         # item.setForeground(QColor())
+
             # Highlight default row (User1)
             if session.get("user") is "User1":
                 for col in range(self.columnCount()):
