@@ -167,6 +167,7 @@ class DataFilterApp(QWidget):
         self.sidebar_button_styles = SIDEBAR_BUTTON_STYLES
         apply_stylesheet(self, theme="gmvTheme.xml")
 
+        self.ldap_user = "System"
         self.data = [
             {"fav": False, "elem": "Caja", "ws": "WS1", "prot": "IPV48", "user": "Bohe"},
             {"fav": False, "elem": "Manzana", "ws": "WS2", "prot": "Protocol1", "user": "User1"},
@@ -229,17 +230,25 @@ class DataFilterApp(QWidget):
         self.hoverable_menu.setStyleSheet(self.sidebar_styles)
         ### END: MENU ###
 
-        ### PRINT ###
-        self.print_button = QPushButton("Print Selected Session", self)
-        self.print_button.clicked.connect(self.print_selected_session)
-        ### END: PRINT ###
+        # ### PRINT ###
+        # self.print_button = QPushButton("Print Selected Session", self)
+        # self.print_button.clicked.connect(self.print_selected_session)
+        # ### END: PRINT ###
+        
+        ### Connection text ###
+        self.connection_text = QLabel(self)
+        self.connection_text.setText("Connected user: " + self.ldap_user)
+        self.connection_text.setStyleSheet("border:2px solid grey; border-radius: 5px;background-color: silver;color: grey")
+        ### END: Connection text ###
+
 
         ### Add layout ###
         self.layout.addWidget(self.hoverable_menu)
         self.filter_layout.addWidget(filter_input)
         self.layout_content.addLayout(self.filter_layout)
         self.layout_content.addWidget(self.stacked_widget)
-        self.layout_content.addWidget(self.print_button)
+        # self.layout_content.addWidget(self.print_button)
+        self.layout_content.addWidget(self.connection_text)
         self.layout.addLayout(self.layout_content)
 
         self.setLayout(self.layout)
