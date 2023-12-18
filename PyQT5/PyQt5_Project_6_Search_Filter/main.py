@@ -217,6 +217,20 @@ class DataFilterApp(QWidget):
         # Shortcut
         shortcut = QShortcut("Ctrl+F", self)
         shortcut.activated.connect(lambda: self.setFocusOnFilterInput(filter_input))
+
+        # New user info layout
+        user_info_layout = QVBoxLayout()
+        user_icon = QLabel(self)
+        user_icon.setPixmap(icon('fa.user', color='#999999').pixmap(24, 24))
+        user_label = QLabel(self.ldap_user)
+
+        # Add user icon and label to the layout
+        user_info_layout.addWidget(user_icon, alignment=Qt.AlignCenter)
+        user_info_layout.addWidget(user_label, alignment=Qt.AlignCenter)
+
+        # Add filter input and user info layout to the horizontal filter layout
+        self.filter_layout.addWidget(filter_input)
+        self.filter_layout.addLayout(user_info_layout)
         ### END: FILTER ###
 
         ### MENU ###
@@ -230,16 +244,10 @@ class DataFilterApp(QWidget):
         self.hoverable_menu.setStyleSheet(self.sidebar_styles)
         ### END: MENU ###
 
-        # ### PRINT ###
-        # self.print_button = QPushButton("Print Selected Session", self)
-        # self.print_button.clicked.connect(self.print_selected_session)
-        # ### END: PRINT ###
-        
-        ### Connection text ###
-        self.connection_text = QLabel(self)
-        self.connection_text.setText("Connected user: " + self.ldap_user)
-        self.connection_text.setStyleSheet("border:2px solid grey; border-radius: 5px;background-color: silver;color: grey")
-        ### END: Connection text ###
+        ### PRINT ###
+        self.print_button = QPushButton("Print Selected Session", self)
+        self.print_button.clicked.connect(self.print_selected_session)
+        ### END: PRINT ###
 
 
         ### Add layout ###
@@ -247,8 +255,7 @@ class DataFilterApp(QWidget):
         self.filter_layout.addWidget(filter_input)
         self.layout_content.addLayout(self.filter_layout)
         self.layout_content.addWidget(self.stacked_widget)
-        # self.layout_content.addWidget(self.print_button)
-        self.layout_content.addWidget(self.connection_text)
+        self.layout_content.addWidget(self.print_button)
         self.layout.addLayout(self.layout_content)
 
         self.setLayout(self.layout)
