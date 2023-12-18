@@ -190,7 +190,6 @@ class DataFilterApp(QWidget):
 
         self.stacked_widget.addWidget(self.home_widget)
         self.stacked_widget.addWidget(self.settings_widget)
-
         ### END: Page layout ###
 
         ### Filter layout ###
@@ -200,15 +199,28 @@ class DataFilterApp(QWidget):
 
         # New user info layout
         user_info_layout = QVBoxLayout()
-        user_icon = QLabel(self)
+
+        # Create a frame to hold the circular border
+        user_info_frame = QFrame(self)
+
+        user_icon = QLabel(user_info_frame)
         user_icon.setPixmap(icon('fa.user', color='#999999').pixmap(24, 24))
-        user_label = QLabel(self.ldap_user)
+        user_info_frame.setStyleSheet("QFrame { border-radius: 12px; border: 2px solid #999999; } QFrame QLabel {border: none}")
+
+        user_label = QLabel(self.ldap_user, user_info_frame)
         user_label.setStyleSheet("color:#BBBBBB; font-weight: bold")
 
-        # Add user icon and label to the layout
-        user_info_layout.addWidget(user_icon, alignment=Qt.AlignCenter)
-        user_info_layout.addWidget(user_label, alignment=Qt.AlignCenter)
+        # Set the frame as the layout for user_info_layout
+        user_info_frame.setLayout(QVBoxLayout())
+
+        # Add user icon and label to the frame's layout
+        user_info_frame.layout().addWidget(user_icon, alignment=Qt.AlignCenter)
+        user_info_frame.layout().addWidget(user_label, alignment=Qt.AlignCenter)
+
+        # Add the user_info_frame to the main layout
+        user_info_layout.addWidget(user_info_frame, alignment=Qt.AlignCenter)
         ### END: Filter layout ###
+
 
         ### FILTER ###
         filter_input = QLineEdit(self)
