@@ -198,14 +198,12 @@ class DataFilterApp(QWidget):
         self.filter_layout = QHBoxLayout()
         self.filter_layout.setContentsMargins(0, 0, 0, 5)
 
-        # Add a spacer on the left side to fill the space
-        spacer = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
-
         # New user info layout
         user_info_layout = QVBoxLayout()
         user_icon = QLabel(self)
         user_icon.setPixmap(icon('fa.user', color='#999999').pixmap(24, 24))
         user_label = QLabel(self.ldap_user)
+        user_label.setStyleSheet("color:#BBBBBB; font-weight: bold")
 
         # Add user icon and label to the layout
         user_info_layout.addWidget(user_icon, alignment=Qt.AlignCenter)
@@ -248,11 +246,12 @@ class DataFilterApp(QWidget):
         self.print_button.clicked.connect(self.print_selected_session)
         ### END: PRINT ###
 
-
         ### Add layout ###
-        self.filter_layout.addItem(spacer)
+        self.filter_layout.addItem(QSpacerItem(0, 0, QSizePolicy.Expanding))
         self.filter_layout.addWidget(filter_input)
+        self.filter_layout.addItem(QSpacerItem(10, 0, QSizePolicy.Fixed))
         self.filter_layout.addLayout(user_info_layout)
+        self.filter_layout.addItem(QSpacerItem(10, 0, QSizePolicy.Fixed))
 
         self.layout_content.addLayout(self.filter_layout)
         self.layout_content.addWidget(self.stacked_widget)
