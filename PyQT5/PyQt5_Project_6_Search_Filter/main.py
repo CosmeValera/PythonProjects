@@ -193,35 +193,26 @@ class DataFilterApp(QWidget):
         ### END: Page layout ###
 
         ### Filter layout ###
-        # Create a horizontal layout to organize the spacer, filter_input and  user_info_layout
+        # Create a horizontal layout to organize the spacer, filter_input, and user_info_layout
         self.filter_layout = QHBoxLayout()
-        self.filter_layout.setContentsMargins(0, 0, 0, 5)
+        # self.filter_layout.setContentsMargins(0, 0, 0, 5)
 
         # New user info layout
         user_info_layout = QVBoxLayout()
 
-        # Create a frame to hold the circular border
-        user_info_frame = QFrame(self)
-
-        user_icon = QLabel(user_info_frame)
+        # Create a label for the user icon
+        user_icon = QLabel()
         user_icon.setPixmap(icon('fa.user', color='#999999').pixmap(24, 24))
         # Set border-radius only for the user_icon
-        user_icon.setStyleSheet("border-radius: 12px; border: 2px solid #999999;")
+        user_icon.setStyleSheet("QLabel { border-radius: 14px; border: 2px solid #999999; }")
 
-        user_label = QLabel(self.ldap_user, user_info_frame)
-        user_label.setStyleSheet("color:#BBBBBB; font-weight: bold")
+        user_label = QLabel(self.ldap_user)
+        user_label.setStyleSheet("QLabel { color:#BBBBBB; font-weight: bold;}")
 
-        # Set the frame as the layout for user_info_layout
-        user_info_frame.setLayout(QVBoxLayout())
-
-        # Add user icon and label to the frame's layout
-        user_info_frame.layout().addWidget(user_icon, alignment=Qt.AlignCenter)
-        user_info_frame.layout().addWidget(user_label, alignment=Qt.AlignCenter)
-
-        # Add the user_info_frame to the main layout
-        user_info_layout.addWidget(user_info_frame, alignment=Qt.AlignCenter)
+        # Add user icon and label to the user_info_layout
+        user_info_layout.addWidget(user_icon, alignment=Qt.AlignCenter)
+        user_info_layout.addWidget(user_label, alignment=Qt.AlignCenter)
         ### END: Filter layout ###
-
 
 
         ### FILTER ###
