@@ -20,6 +20,7 @@ class MyTableWidget(QTableWidget):
         self.setSelectionBehavior(QTableWidget.SelectRows)
         self.cellClicked.connect(partial(self.select_session, parent))
         self.verticalHeader().sectionClicked.connect(self.row_header_clicked)
+        self.horizontalHeader().sectionClicked.connect(self.header_clicked)
         self.itemSelectionChanged.connect(self.selection_changed)
 
         self.headers = ["Fav", "Element", "Workstation", "Protocol", "User"]
@@ -84,6 +85,10 @@ class MyTableWidget(QTableWidget):
 
     def row_header_clicked(self, selected_row_index):
         self.parent().selected_session = self.data[selected_row_index]
+
+    def header_clicked(self, index):
+        header_name = self.horizontalHeaderItem(index).text()
+        print("Clicked header with value:", header_name)
 
     def selection_changed(self):
         selected_items = self.selectedItems()
@@ -167,7 +172,7 @@ class DataFilterApp(QWidget):
         self.sidebar_button_styles = SIDEBAR_BUTTON_STYLES
         apply_stylesheet(self, theme="gmvTheme.xml")
 
-        self.ldap_user = "System"
+        self.ldap_user = "system"
         self.data = [
             {"fav": False, "elem": "Caja", "ws": "WS1", "prot": "IPV48", "user": "Bohe"},
             {"fav": False, "elem": "Manzana", "ws": "WS2", "prot": "Protocol1", "user": "User1"},
