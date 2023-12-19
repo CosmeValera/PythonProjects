@@ -205,7 +205,8 @@ class DataFilterApp(QWidget):
 
         user_icon = QLabel(user_info_frame)
         user_icon.setPixmap(icon('fa.user', color='#999999').pixmap(24, 24))
-        user_info_frame.setStyleSheet("QFrame { border-radius: 12px; border: 2px solid #999999; } QFrame QLabel {border: none}")
+        # Set border-radius only for the user_icon
+        user_icon.setStyleSheet("border-radius: 12px; border: 2px solid #999999;")
 
         user_label = QLabel(self.ldap_user, user_info_frame)
         user_label.setStyleSheet("color:#BBBBBB; font-weight: bold")
@@ -220,6 +221,7 @@ class DataFilterApp(QWidget):
         # Add the user_info_frame to the main layout
         user_info_layout.addWidget(user_info_frame, alignment=Qt.AlignCenter)
         ### END: Filter layout ###
+
 
 
         ### FILTER ###
