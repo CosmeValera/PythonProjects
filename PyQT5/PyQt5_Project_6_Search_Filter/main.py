@@ -12,7 +12,7 @@ from guiStyles import FILTER_STYLES, SIDEBAR_STYLES, SIDEBAR_BUTTON_STYLES, SEPA
 
 # MY PROJECT
 class MyTableWidget(QTableWidget):
-    FIRST_COLUMN_WIDTH = 70
+    FIRST_COLUMN_WIDTH = 110
     CHECKBOX_SIZE = 20
 
     def __init__(self, parent, data):
@@ -24,14 +24,16 @@ class MyTableWidget(QTableWidget):
         self.itemSelectionChanged.connect(self.selection_changed)
 
         self.headers = ["Fav", "Element", "Workstation", "Protocol", "User"]
+        self.column_names = ["fav", "elem", "ws", "prot", "user"]
         self.setColumnCount(len(self.headers))
         self.setColumnWidth(0, self.FIRST_COLUMN_WIDTH)
-        self.setColumnWidth(1, 100)
-        self.setColumnWidth(2, 140)
-        self.setColumnWidth(3, 120)
-        self.setColumnWidth(4, 80)
+        self.setColumnWidth(1, 140)
+        self.setColumnWidth(2, 180)
+        self.setColumnWidth(3, 160)
+        self.setColumnWidth(4, 120)
         self.setHorizontalHeaderLabels(self.headers)
 
+        self.index_last_header_clicked = None
         self.fav_sort_order = None
         self.elem_sort_order = None
         self.ws_sort_order = None
@@ -48,6 +50,25 @@ class MyTableWidget(QTableWidget):
 
     def set_data(self):
         self.setRowCount(len(self.data))
+
+        self.set_data_headers()
+
+        self.set_data_content()
+
+    def set_data_headers(self):
+        for col, header in enumerate(self.headers):
+            header_item = QTableWidgetItem(header)
+
+            if self.index_last_header_clicked is not None and self.index_last_header_clicked == col:
+                header_simple = self.column_names[col]
+                header_flag = getattr(self, header_simple + "_sort_order")
+                fa_arrow = 'fa.arrow-down' if header_flag else 'fa.arrow-up'
+                arrow_icon = icon(fa_arrow, color='#999999')
+                header_item.setIcon(arrow_icon)
+                
+            self.setHorizontalHeaderItem(col, header_item)
+
+    def set_data_content(self):
         for index, session in enumerate(self.data):
             # 0 fav
             checkBox = QCheckBox()
@@ -63,14 +84,15 @@ class MyTableWidget(QTableWidget):
             self.setItem(index, 3, QTableWidgetItem(str(session.get("prot"))))
             self.setItem(index, 4, QTableWidgetItem(str(session.get("user"))))
             
-            # Set items as read-only
-            for col in range(self.columnCount()):
-                item = self.item(index, col)
-                if item:
-                    item.setFlags(item.flags() & ~Qt.ItemIsEditable)
-            
+            self.make_items_read_only(index)
             self.highligh_fav_rows(index, session)
             self.highligh_default_rows(index, session)
+    
+    def make_items_read_only(self, index):
+        for col in range(self.columnCount()):
+            item = self.item(index, col)
+            if item:
+                item.setFlags(item.flags() & ~Qt.ItemIsEditable)
 
     def highligh_fav_rows(self, index, session):
         if session.get("fav") is True:
@@ -88,23 +110,13 @@ class MyTableWidget(QTableWidget):
                     item.setBackground(QColor(246, 246, 246, 26))
                     # item.setForeground(QColor())
 
-    def select_session(self, view):
-        selected_row_index = self.selectedIndexes()[0].row()
-        view.selected_session = self.data[selected_row_index]
-
-    def selection_changed(self):
-        selected_items = self.selectedItems()
-        if not selected_items:
-            self.parent().selected_session = None
-
     def row_header_clicked(self, selected_row_index):
         self.parent().selected_session = self.data[selected_row_index]
 
     def header_clicked(self, index):
-        column_names = ["fav", "elem", "ws", "prot", "user"]
-
-        if index or index == 0:
-            self.toggle_order_by(column_names[index])
+        if index is not None:
+            self.index_last_header_clicked = index
+            self.toggle_order_by(self.column_names[index])
             self.set_data()
         
     def toggle_order_by(self, header):
@@ -116,6 +128,16 @@ class MyTableWidget(QTableWidget):
         else:
             self.data.sort(key=lambda x: x.get(header))
             setattr(self, header + '_sort_order', Qt.AscendingOrder)
+
+    def select_session(self, view):
+        selected_row_index = self.selectedIndexes()[0].row()
+        view.selected_session = self.data[selected_row_index]
+
+    def selection_changed(self):
+        selected_items = self.selectedItems()
+        if not selected_items:
+            self.parent().selected_session = None
+
 
 
 class HomeWidget(QWidget):
@@ -298,7 +320,7 @@ class DataFilterApp(QWidget):
 
         self.setGeometry(100, 100, 800, 600)
         self.setWindowTitle('Data Filter App')
-        self.resize(800,400)
+        self.resize(950,400)
         self.show()
 
     def create_menu_button(self, text, emoji, index):
