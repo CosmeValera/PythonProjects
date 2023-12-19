@@ -32,6 +32,12 @@ class MyTableWidget(QTableWidget):
         self.setColumnWidth(4, 80)
         self.setHorizontalHeaderLabels(self.headers)
 
+        self.fav_sort_order = None
+        self.elem_sort_order = None
+        self.ws_sort_order = None
+        self.prot_sort_order = None
+        self.user_sort_order = None
+
         self.data = data
         self.set_data()
         
@@ -83,17 +89,31 @@ class MyTableWidget(QTableWidget):
         selected_row_index = self.selectedIndexes()[0].row()
         view.selected_session = self.data[selected_row_index]
 
-    def row_header_clicked(self, selected_row_index):
-        self.parent().selected_session = self.data[selected_row_index]
-
-    def header_clicked(self, index):
-        header_name = self.horizontalHeaderItem(index).text()
-        print("Clicked header with value:", header_name)
-
     def selection_changed(self):
         selected_items = self.selectedItems()
         if not selected_items:
             self.parent().selected_session = None
+
+    def row_header_clicked(self, selected_row_index):
+        self.parent().selected_session = self.data[selected_row_index]
+
+    def header_clicked(self, index):
+        column_names = ["fav", "elem", "ws", "prot", "user"]
+
+        if index or index == 0:
+            self.toggle_order_by(column_names[index])
+            self.set_data()
+        
+    def toggle_order_by(self, header):
+        header_flag = getattr(self, header + "_sort_order")
+
+        if header_flag is None or header_flag == Qt.AscendingOrder:
+            self.data.sort(key=lambda x: x.get(header), reverse=True)
+            setattr(self, header + '_sort_order', Qt.DescendingOrder)
+        else:
+            self.data.sort(key=lambda x: x.get(header))
+            setattr(self, header + '_sort_order', Qt.AscendingOrder)
+
 
 class HomeWidget(QWidget):
     def __init__(self, parent):
