@@ -69,21 +69,24 @@ class MyTableWidget(QTableWidget):
                 if item:
                     item.setFlags(item.flags() & ~Qt.ItemIsEditable)
             
-            # Highlight fav rows
-            if session.get("fav") is True:
-                for col in range(self.columnCount()):
-                    item = self.item(index, col)
-                    if item:
-                        item.setBackground(QColor(223, 0, 36, 26))
-                        # item.setForeground(QColor())
+            self.highligh_fav_rows(index, session)
+            self.highligh_default_rows(index, session)
 
-            # Highlight default row (User1)
-            if session.get("user") is "User1":
-                for col in range(self.columnCount()):
-                    item = self.item(index, col)
-                    if item:
-                        item.setBackground(QColor(246, 246, 246, 26))
-                        # item.setForeground(QColor())
+    def highligh_fav_rows(self, index, session):
+        if session.get("fav") is True:
+            for col in range(self.columnCount()):
+                item = self.item(index, col)
+                if item:
+                    item.setBackground(QColor(223, 0, 36, 26))
+                    # item.setForeground(QColor())
+
+    def highligh_default_rows(self, index, session):
+        if session.get("user") is "User1":
+            for col in range(self.columnCount()):
+                item = self.item(index, col)
+                if item:
+                    item.setBackground(QColor(246, 246, 246, 26))
+                    # item.setForeground(QColor())
 
     def select_session(self, view):
         selected_row_index = self.selectedIndexes()[0].row()
