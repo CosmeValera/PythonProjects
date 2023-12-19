@@ -193,12 +193,13 @@ class DataFilterApp(QWidget):
         ### END: Page layout ###
 
         ### Filter layout ###
-        # Create a horizontal layout to organize the spacer, filter_input, and user_info_layout
+        # Create a horizontal layout to organize the spacer, filter_input, and user_connection_layout
         self.filter_layout = QHBoxLayout()
-        # self.filter_layout.setContentsMargins(0, 0, 0, 5)
+        self.filter_layout.setContentsMargins(0, 5, 15, 5)
 
         # New user info layout
-        user_info_layout = QVBoxLayout()
+        user_connection_layout = QVBoxLayout()
+        user_connection_layout.setSpacing(2)
 
         # Create a label for the user icon
         user_icon = QLabel()
@@ -207,11 +208,11 @@ class DataFilterApp(QWidget):
         user_icon.setStyleSheet("QLabel { border-radius: 14px; border: 2px solid #999999; }")
 
         user_label = QLabel(self.ldap_user)
-        user_label.setStyleSheet("QLabel { color:#BBBBBB; font-weight: bold;}")
+        user_label.setStyleSheet("QLabel { color:#BBBBBB; font-weight: bold; font-size: 8pt;}")
 
-        # Add user icon and label to the user_info_layout
-        user_info_layout.addWidget(user_icon, alignment=Qt.AlignCenter)
-        user_info_layout.addWidget(user_label, alignment=Qt.AlignCenter)
+        # Add user icon and label to the user_connection_layout
+        user_connection_layout.addWidget(user_icon, alignment=Qt.AlignCenter)
+        user_connection_layout.addWidget(user_label, alignment=Qt.AlignCenter)
         ### END: Filter layout ###
 
 
@@ -255,8 +256,7 @@ class DataFilterApp(QWidget):
         self.filter_layout.addItem(QSpacerItem(0, 0, QSizePolicy.Expanding))
         self.filter_layout.addWidget(filter_input)
         self.filter_layout.addItem(QSpacerItem(10, 0, QSizePolicy.Fixed))
-        self.filter_layout.addLayout(user_info_layout)
-        self.filter_layout.addItem(QSpacerItem(10, 0, QSizePolicy.Fixed))
+        self.filter_layout.addLayout(user_connection_layout)
 
         self.layout_content.addLayout(self.filter_layout)
         self.layout_content.addWidget(self.stacked_widget)
