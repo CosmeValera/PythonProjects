@@ -3,7 +3,7 @@ from PyQt5.QtWidgets import (QApplication, QWidget, QVBoxLayout, QHBoxLayout, QL
 QTableWidgetItem, QPushButton, QSpacerItem, QSizePolicy, QShortcut, QLabel, QStackedWidget, QFrame,
 QCheckBox)
 from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QPalette, QColor
+from PyQt5.QtGui import QPalette, QColor, QIcon
 from PyQt5.QtSvg import QSvgWidget
 from functools import partial
 from qtawesome import icon
@@ -68,15 +68,23 @@ class MyTableWidget(QTableWidget):
                 
             self.setHorizontalHeaderItem(col, header_item)
 
+
+            # checkBox = QCheckBox()
+            # checkBox.setChecked(session.get("fav"))
+            # checkbox_padding = self.FIRST_COLUMN_WIDTH // 2 - self.CHECKBOX_SIZE // 2
+            # checkBox.setStyleSheet(f"QCheckBox {{ padding-left: {checkbox_padding}px; }}")
+
+            # self.setCellWidget(index, 0, checkBox)
+            # self.setItem(index, 0, QTableWidgetItem())
     def set_data_content(self):
         for index, session in enumerate(self.data):
-            # 0 fav
-            checkBox = QCheckBox()
-            checkBox.setChecked(session.get("fav"))
-            checkbox_padding = self.FIRST_COLUMN_WIDTH // 2 - self.CHECKBOX_SIZE // 2
-            checkBox.setStyleSheet(f"QCheckBox {{ padding-left: {checkbox_padding}px; }}")
+            star_icon = icon('fa.star' if session.get("fav") else 'fa.star-o', color='yellow')
 
-            self.setCellWidget(index, 0, checkBox)
+            fav_label = QLabel()
+            fav_label.setAlignment(Qt.AlignCenter)
+            fav_label.setPixmap(star_icon.pixmap(16, 16))  # Adjust the size as needed
+
+            self.setCellWidget(index, 0, fav_label)
             self.setItem(index, 0, QTableWidgetItem())
             self.setItem(index, 1, QTableWidgetItem(str(session.get("elem"))))
             self.setItem(index, 2, QTableWidgetItem(str(session.get("ws"))))
