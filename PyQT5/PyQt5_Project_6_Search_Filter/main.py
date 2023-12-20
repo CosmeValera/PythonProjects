@@ -73,7 +73,6 @@ class MyTableWidget(QTableWidget):
             # 0 fav
             checkBox = QCheckBox()
             checkBox.setChecked(session.get("fav"))
-
             checkbox_padding = self.FIRST_COLUMN_WIDTH // 2 - self.CHECKBOX_SIZE // 2
             checkBox.setStyleSheet(f"QCheckBox {{ padding-left: {checkbox_padding}px; }}")
 
@@ -85,8 +84,8 @@ class MyTableWidget(QTableWidget):
             self.setItem(index, 4, QTableWidgetItem(str(session.get("user"))))
             
             self.make_items_read_only(index)
-            self.highligh_fav_rows(index, session)
-            self.highligh_default_rows(index, session)
+            self.highlight_fav_rows(index, session)
+            self.highlight_default_rows(index, session)
     
     def make_items_read_only(self, index):
         for col in range(self.columnCount()):
@@ -94,7 +93,7 @@ class MyTableWidget(QTableWidget):
             if item:
                 item.setFlags(item.flags() & ~Qt.ItemIsEditable)
 
-    def highligh_fav_rows(self, index, session):
+    def highlight_fav_rows(self, index, session):
         if session.get("fav") is True:
             for col in range(self.columnCount()):
                 item = self.item(index, col)
@@ -102,7 +101,7 @@ class MyTableWidget(QTableWidget):
                     item.setBackground(QColor(223, 0, 36, 26))
                     # item.setForeground(QColor())
 
-    def highligh_default_rows(self, index, session):
+    def highlight_default_rows(self, index, session):
         if session.get("user") is "User1":
             for col in range(self.columnCount()):
                 item = self.item(index, col)
