@@ -69,23 +69,19 @@ class MyTableWidget(QTableWidget):
             self.setHorizontalHeaderItem(col, header_item)
 
 
-            # checkBox = QCheckBox()
-            # checkBox.setChecked(session.get("fav"))
-            # checkbox_padding = self.FIRST_COLUMN_WIDTH // 2 - self.CHECKBOX_SIZE // 2
-            # checkBox.setStyleSheet(f"QCheckBox {{ padding-left: {checkbox_padding}px; }}")
-
-            # self.setCellWidget(index, 0, checkBox)
-            # self.setItem(index, 0, QTableWidgetItem())
     def set_data_content(self):
         for index, session in enumerate(self.data):
-            star_icon = icon('fa.star' if session.get("fav") else 'fa.star-o', color='yellow')
+            star_icon = icon('fa.star' if session.get("fav") else 'fa.star-o', color='#DF0024', opacity=0.75)
 
             fav_label = QLabel()
             fav_label.setAlignment(Qt.AlignCenter)
-            fav_label.setPixmap(star_icon.pixmap(16, 16))  # Adjust the size as needed
+            fav_label.setPixmap(star_icon.pixmap(16, 16))
+            fav_label.mousePressEvent = lambda event, s=session: print(s)
 
             self.setCellWidget(index, 0, fav_label)
             self.setItem(index, 0, QTableWidgetItem())
+
+
             self.setItem(index, 1, QTableWidgetItem(str(session.get("elem"))))
             self.setItem(index, 2, QTableWidgetItem(str(session.get("ws"))))
             self.setItem(index, 3, QTableWidgetItem(str(session.get("prot"))))
@@ -95,6 +91,10 @@ class MyTableWidget(QTableWidget):
             self.highlight_fav_rows(index, session)
             self.highlight_default_rows(index, session)
     
+    
+    def star_icon_clicked(self):
+        print("star_icon_clicked")
+
     def make_items_read_only(self, index):
         for col in range(self.columnCount()):
             item = self.item(index, col)
@@ -144,7 +144,6 @@ class MyTableWidget(QTableWidget):
         selected_items = self.selectedItems()
         if not selected_items:
             self.parent().selected_session = None
-
 
 
 class HomeWidget(QWidget):
