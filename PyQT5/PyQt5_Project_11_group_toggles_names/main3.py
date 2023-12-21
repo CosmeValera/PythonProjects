@@ -3,7 +3,7 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QTableWidget, QTableWidge
 from PyQt5.QtGui import QStandardItemModel, QStandardItem
 
 class MyWindow(QMainWindow):
-    def __init__(self, data):
+    def __init__(self):
         super().__init__()
         self.setWindowTitle("PyQt5 Table, ComboBox, and TreeView Example")
         self.setGeometry(100, 100, 800, 600)
@@ -12,7 +12,14 @@ class MyWindow(QMainWindow):
         self.tableWidget = QTableWidget(self)
         self.tableWidget.setColumnCount(3)
         self.tableWidget.setHorizontalHeaderLabels(["id", "number", "name"])
-        self.addItemsToTable(data)
+        self.data = [
+            {"id": "1", "number": "one", "name": "pepe"},
+            {"id": "2", "number": "two", "name": "javi"},
+            {"id": "3", "number": "one", "name": "javi"},
+            {"id": "4", "number": "five", "name": "javi"},
+            {"id": "1", "number": "four", "name": "marcos"}
+        ]
+        self.addItemsToTable(self.data)
 
         # Create QComboBox
         self.comboBox = QComboBox(self)
@@ -61,13 +68,6 @@ class MyWindow(QMainWindow):
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    data = [
-        {"id": "1", "number": "one", "name": "pepe"},
-        {"id": "2", "number": "two", "name": "javi"},
-        {"id": "3", "number": "one", "name": "javi"},
-        {"id": "4", "number": "five", "name": "javi"},
-        {"id": "1", "number": "four", "name": "marcos"}
-    ]
-    window = MyWindow(data)
+    window = MyWindow()
     window.show()
     sys.exit(app.exec_())
