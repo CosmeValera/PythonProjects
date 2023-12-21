@@ -8,6 +8,7 @@ class MyWindow(QMainWindow):
         self.setWindowTitle("PyQt5 Table, ComboBox, and TreeView Example")
         self.setGeometry(100, 100, 800, 600)
 
+
         # Create QTableWidget
         self.tableWidget = QTableWidget(self)
         self.tableWidget.setColumnCount(3)
@@ -54,16 +55,16 @@ class MyWindow(QMainWindow):
 
         grouped_data = {}
         for row in range(self.tableWidget.rowCount()):
-            item = self.tableWidget.item(row, self.comboBox.currentIndex())
-            value = item.text()
-            if value not in grouped_data:
-                grouped_data[value] = []
-            grouped_data[value].append([self.tableWidget.item(row, col).text() for col in range(3)])
+            key = self.tableWidget.item(row, self.comboBox.currentIndex()).text()
+            if key not in grouped_data:
+                grouped_data[key] = []
+            grouped_data[key].append([self.tableWidget.item(row, col).text() for col in range(3)])
 
         for key, values in grouped_data.items():
             category_item = QStandardItem(key)
             for v in values:
-                category_item.appendRow([QStandardItem(val) for val in v])
+                row_item = QStandardItem(", ".join(v))  # Combine values into a single string
+                category_item.appendRow(row_item)
             root_item.appendRow(category_item)
 
 if __name__ == "__main__":
