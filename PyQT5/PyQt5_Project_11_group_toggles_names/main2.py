@@ -1,5 +1,5 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QTableWidget, QTableWidgetItem, QVBoxLayout, QWidget, QPushButton
+from PyQt5.QtWidgets import QApplication, QTableWidget, QTableWidgetItem, QVBoxLayout, QWidget, QComboBox
 
 class GroupedTableWidget(QWidget):
     def __init__(self):
@@ -17,12 +17,13 @@ class GroupedTableWidget(QWidget):
 
         self.populate_table()
 
-        self.group_button = QPushButton("Toggle Group")
-        self.group_button.clicked.connect(self.toggle_group)
+        self.column_selector = QComboBox(self)
+        self.column_selector.addItems(["id", "number", "name"])
+        self.column_selector.currentIndexChanged.connect(self.group_by_column)
 
         layout = QVBoxLayout(self)
+        layout.addWidget(self.column_selector)
         layout.addWidget(self.table_widget)
-        layout.addWidget(self.group_button)
 
     def populate_table(self):
         self.table_widget.setRowCount(len(self.data))
@@ -31,21 +32,42 @@ class GroupedTableWidget(QWidget):
             for col, value in enumerate(item.values()):
                 self.table_widget.setItem(row, col, QTableWidgetItem(value))
 
-    def toggle_group(self):
-        group_name = "pepe"  # Replace with the desired group name
-        show_group = not self.is_group_visible(group_name)
+    def group_by_column(self, index):
+        column_name = self.column_selector.itemText(index)
 
-        for row in range(self.table_widget.rowCount()):
-            name_item = self.table_widget.item(row, 2)  # Assuming "name" is the third column
-            if name_item.text() == group_name:
-                self.table_widget.setRowHidden(row, not show_group)
+        if column_name == "name":
+            self.group_by_name()
 
-    def is_group_visible(self, group_name):
+    def group_by_name(self):
+        name_column_index = 2  # Assuming "name" is the third column
+
+        grouped_data = {}
         for row in range(self.table_widget.rowCount()):
-            name_item = self.table_widget.item(row, 2)  # Assuming "name" is the third column
-            if name_item.text() == group_name and not self.table_widget.isRowHidden(row):
-                return True
-        return False
+            name_item = self.table_widget.item(row, name_column_index)
+
+            name_value = name_item.text()
+            if name_value not in grouped_data:
+                grouped_data[name_value] = {"id": set(), "number": set()}
+
+            id_item = self.table_widget.item(row, 0)  # Assuming "id" is the first column
+            number_item = self.table_widget.item(row, 1)  # Assuming "number" is the second column
+
+            grouped_data[name_value]["id"].add(id_item.text())
+            grouped_data[name_value]["number"].add(number_item.text())
+
+        # Clear the table
+        self.table_widget.setRowCount(0)
+
+        # Add grouped data to the table
+        for name_value, columns in grouped_data.items():
+            self.table_widget.insertRow(self.table_widget.rowCount())
+
+            id_text = ", ".join(sorted(columns["id"]))
+            number_text = ", ".join(sorted(columns["number"]))
+
+            self.table_widget.setItem(self.table_widget.rowCount() - 1, 0, QTableWidgetItem(id_text))
+            self.table_widget.setItem(self.table_widget.rowCount() - 1, 1, QTableWidgetItem(number_text))
+            self.table_widget.setItem(self.table_widget.rowCount() - 1, 2, QTableWidgetItem(name_value))
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
