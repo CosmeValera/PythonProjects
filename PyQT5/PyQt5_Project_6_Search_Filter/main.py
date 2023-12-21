@@ -8,7 +8,7 @@ from PyQt5.QtSvg import QSvgWidget
 from functools import partial
 from qtawesome import icon
 from qt_material import apply_stylesheet
-from guiStyles import FILTER_STYLES, SIDEBAR_STYLES, SIDEBAR_BUTTON_STYLES, SEPARATOR_STYLES
+from guiStyles import FILTER_STYLES, SIDEBAR_STYLES, SIDEBAR_BUTTON_STYLES, SEPARATOR_STYLES, BUTTON_STYLES
 
 # MY PROJECT
 class MyTableWidget(QTableWidget):
@@ -248,6 +248,12 @@ class DataFilterApp(QWidget):
         self.stacked_widget.addWidget(self.settings_widget)
         ### END: Page layout ###
 
+        
+        # Grouping
+        label_group = QPushButton("Group button")
+        label_group.setStyleSheet(BUTTON_STYLES)
+
+
         ### Filter layout ###
         # Create a horizontal layout to organize the spacer, filter_input, and user_connection_layout
         self.filter_layout = QHBoxLayout()
@@ -310,6 +316,7 @@ class DataFilterApp(QWidget):
 
         ### Add layout ###
         self.filter_layout.addItem(QSpacerItem(0, 0, QSizePolicy.Expanding))
+        self.filter_layout.addWidget(label_group)
         self.filter_layout.addWidget(filter_input)
         self.filter_layout.addItem(QSpacerItem(10, 0, QSizePolicy.Fixed))
         self.filter_layout.addLayout(user_connection_layout)
