@@ -49,17 +49,14 @@ class MyWindow(QMainWindow):
                 self.tableWidget.setItem(row, col, QTableWidgetItem(str(value)))
 
     def updateTreeView(self, index):
-        header = self.comboBox.currentText()
+        header = self.comboBox.currentText()  # Use the text of the ComboBox
         self.model.clear()
         root_item = self.model.invisibleRootItem()
 
-        grouped_data = {}
         for row in range(self.tableWidget.rowCount()):
-            key = self.tableWidget.item(row, self.comboBox.currentIndex()).text()
-            if key not in grouped_data:
-                grouped_data[key] = []
-            grouped_data[key].append([self.tableWidget.item(row, col).text() for col in range(3)])
-
+            row_values = [self.tableWidget.item(row, col).text() for col in range(3)]
+            row_item = QStandardItem(", ".join(row_values))  # Combine values into a single string
+            root_item.appendRow(row_item)
         for key, values in grouped_data.items():
             category_item = QStandardItem(key)
             for v in values:
