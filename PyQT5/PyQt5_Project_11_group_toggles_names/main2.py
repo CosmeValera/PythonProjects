@@ -1,23 +1,79 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QTableWidget, QTableWidgetItem, QVBoxLayout, QWidget, QComboBox, QPushButton
+from PyQt5.QtWidgets import QApplication, QTreeView, QComboBox, QVBoxLayout, QWidget
+from PyQt5.QtGui import QStandardItemModel, QStandardItem, QColor
 
-class GroupedTableWidget(QWidget):
-    def __init__(self):
-        super(GroupedTableWidget, self).__init__()
+
+class GroupModel(QStandardItemModel):
+    def __init__(self, original_data, parent=None):
+        super(GroupModel, self).__init__(parent)
+        self.original_data = original_data
+        self.setColumnCount(3)
+        self.setHorizontalHeaderLabels(["id", "number", "name"])
+        for i in range(self.columnCount()):
+            it = self.horizontalHeaderItem(i)
+            it.setForeground(QColor("#191919"))
+
+    def update_model(self, selected_header):
+        self.clear()
+        self.setHorizontalHeaderLabels(["id", "number", "name"])
+        self.setColumnCount(3)
+        for i in range(self.columnCount()):
+            it = self.horizontalHeaderItem(i)
+            it.setForeground(QColor("#565656"))
+
+        categories = {}
+
+        for row, item in enumerate(self.original_data):
+            category_key = item[selected_header]
+            if category_key not in categories:
+                categories[category_key] = self.add_category(category_key)
+
+            self.append_element_to_group(categories[category_key], item)
+
+    def add_category(self, category_name):
+        item_root = QStandardItem(category_name)
+        item_root.setEditable(False)
+        ii = self.invisibleRootItem()
+        i = ii.rowCount()
+        for j, it in enumerate((item_root,)):
+            ii.setChild(i, j, it)
+            ii.setEditable(False)
+        for j in range(self.columnCount()):
+            it = ii.child(i, j)
+            if it is None:
+                it = QStandardItem()
+                ii.setChild(i, j, it)
+            it.setBackground(QColor("#009842"))
+            it.setForeground(QColor("#F2F2F2"))
+        return item_root
+
+    def append_element_to_group(self, group_item, item_data):
+        j = group_item.rowCount()
+        for i, text in enumerate(item_data.values()):
+            item = QStandardItem(str(text))
+            item.setEditable(False)
+            item.setBackground(QColor("#0D1225"))
+            item.setForeground(QColor("#F2F2F2"))
+            group_item.setChild(j, i, item)
+
+class MainWindow(QWidget):
+    def __init__(self, parent=None):
+        super(MainWindow, self).__init__(parent)
 
         self.original_data = [
             {"id": "1", "number": "one", "name": "pepe"},
             {"id": "2", "number": "two", "name": "javi"},
             {"id": "3", "number": "one", "name": "javi"},
             {"id": "4", "number": "five", "name": "javi"},
-            {"id": "1", "number": "two", "name": "marcos"}
+            {"id": "1", "number": "four", "name": "marcos"}
         ]
 
-        self.table_widget = QTableWidget(self)
-        self.table_widget.setColumnCount(4)  # Additional column for the button
-        self.table_widget.setHorizontalHeaderLabels(["id", "number", "name", ""])
+        self.model = GroupModel(self.original_data, self)
 
-        self.populate_table()
+        self.tree_view = QTreeView(self)
+        self.tree_view.setModel(self.model)
+        self.tree_view.setIndentation(0)
+        self.tree_view.setExpandsOnDoubleClick(False)
 
         self.column_selector = QComboBox(self)
         self.column_selector.addItems(["", "id", "number", "name"])
@@ -25,80 +81,18 @@ class GroupedTableWidget(QWidget):
 
         layout = QVBoxLayout(self)
         layout.addWidget(self.column_selector)
-        layout.addWidget(self.table_widget)
+        layout.addWidget(self.tree_view)
 
-    def populate_table(self):
-        self.table_widget.setRowCount(len(self.original_data))
-
-        for row, item in enumerate(self.original_data):
-            for col, value in enumerate(item.values()):
-                self.table_widget.setItem(row, col, QTableWidgetItem(value))
-
-            fold_button = QPushButton("Toggle")
-            fold_button.clicked.connect(lambda _, r=row: self.toggle_rows(r))
-            self.table_widget.setCellWidget(row, 3, fold_button)
+        self.setLayout(layout)
 
     def group_by_column(self, index):
-        column_name = self.column_selector.itemText(index)
-
-        self.restore_original_data()
-        if column_name in {"id", "name", "number"}:
-            self.group_by_column_value(column_name)
-
-    def group_by_column_value(self, column_name):
-        column_index = {"id": 0, "number": 1, "name": 2}[column_name]
-
-        grouped_data = {}
-        for row in range(self.table_widget.rowCount()):
-            column_item = self.table_widget.item(row, column_index)
-
-            column_value = column_item.text()
-            if column_value not in grouped_data:
-                grouped_data[column_value] = {"id": set(), "number": set(), "name": set()}
-
-            for col in range(self.table_widget.columnCount() - 1):  # Exclude the button column
-                value = self.table_widget.item(row, col).text()
-                grouped_data[column_value][self.table_widget.horizontalHeaderItem(col).text()].add(value)
-
-        # Clear the table
-        self.table_widget.setRowCount(0)
-
-        # Add grouped data to the table
-        for column_value, columns in grouped_data.items():
-            self.table_widget.insertRow(self.table_widget.rowCount())
-
-            for col, values in enumerate(columns.values()):
-                text = ", ".join(sorted(values))
-                self.table_widget.setItem(self.table_widget.rowCount() - 1, col, QTableWidgetItem(text))
-
-            fold_button = QPushButton("Toggle")
-            fold_button.clicked.connect(lambda _, v=column_value: self.toggle_group(v))
-            self.table_widget.setCellWidget(self.table_widget.rowCount() - 1, 3, fold_button)
-
-    def restore_original_data(self):
-        self.table_widget.setRowCount(0)
-        for row, item in enumerate(self.original_data):
-            self.table_widget.insertRow(row)
-            for col, value in enumerate(item.values()):
-                self.table_widget.setItem(row, col, QTableWidgetItem(value))
-
-            fold_button = QPushButton("Toggle")
-            fold_button.clicked.connect(lambda _, r=row: self.toggle_rows(r))
-            self.table_widget.setCellWidget(row, 3, fold_button)
-
-    def toggle_group(self, column_value):
-        for row in range(self.table_widget.rowCount()):
-            if self.table_widget.item(row, 0).text() == column_value:
-                self.table_widget.setRowHidden(row, not self.table_widget.isRowHidden(row))
-
-    def toggle_rows(self, row):
-        if self.table_widget.isRowHidden(row):
-            self.table_widget.setRowHidden(row, False)
-        else:
-            self.table_widget.setRowHidden(row, True)
+        selected_header = self.column_selector.currentText()
+        if selected_header:
+            self.model.update_model(selected_header)
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    window = GroupedTableWidget()
+    window = MainWindow()
+    window.resize(720, 240)
     window.show()
     sys.exit(app.exec_())
