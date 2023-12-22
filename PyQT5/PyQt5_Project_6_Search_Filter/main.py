@@ -145,6 +145,9 @@ class MyTableWidget(QTableWidget):
         if not selected_items:
             self.parent().selected_session = None
 
+
+# TODO: To continue with this, grouping and so, on take a glance at 2.5 and 4,
+# there are examples with subtrees and so on. :)
 class MyTreeWidget(QTreeWidget):
     def __init__(self, parent, data):
         super().__init__(parent)
