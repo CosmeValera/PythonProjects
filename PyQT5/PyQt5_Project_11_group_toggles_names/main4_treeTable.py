@@ -15,13 +15,16 @@ class TreeTable(QWidget):
         ]
 
         for id_, name, items in data:
-            parent = QTreeWidgetItem(self.tree)
+            parent = QTreeWidgetItem()
             parent.setText(0, id_)
             parent.setText(1, name)
+            self.tree.addTopLevelItem(parent)
+            
             for id_, name in items:
-                child = QTreeWidgetItem(parent)
+                child = QTreeWidgetItem()
                 child.setText(0, id_)
                 child.setText(1, name)
+                parent.addChild(child)
         
         self.layout = QVBoxLayout()
         self.layout.addWidget(self.tree)
