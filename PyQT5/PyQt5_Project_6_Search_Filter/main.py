@@ -146,26 +146,31 @@ class MyTableWidget(QTableWidget):
             self.parent().selected_session = None
 
 class MyTreeWidget(QTreeWidget):
-    def __init__(self, parent, dataaa):
+    def __init__(self, parent, data):
         super().__init__(parent)
 
-        self.setColumnCount(2)
-        self.setHeaderLabels(['ID', 'Name'])
+        self.setColumnCount(5)  # Assuming there are five columns in your data
+        self.setHeaderLabels(['Favorite', 'Element', 'Workspace', 'Protocol', 'User'])
 
-        data = [
-            ('1', 'Category 1'),
-            ('2', 'Category 2'),
-        ]
         self.addItemsRecursively(data)
 
         self.layout = QVBoxLayout(self)
         self.setLayout(self.layout)
 
     def addItemsRecursively(self, data, parentItem=None):
-        for id_, name in data:
+        for item_data in data:
+            elem = item_data['elem']
+            ws = item_data['ws']
+            prot = item_data['prot']
+            user = item_data['user']
+            fav = item_data['fav']
+
             item = QTreeWidgetItem(parentItem)
-            item.setText(0, id_)
-            item.setText(1, name)
+            item.setCheckState(0, Qt.Checked if fav else Qt.Unchecked)
+            item.setText(1, elem)
+            item.setText(2, ws)
+            item.setText(3, prot)
+            item.setText(4, user)
 
             if parentItem is None:
                 self.addTopLevelItem(item)
