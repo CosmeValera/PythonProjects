@@ -153,28 +153,24 @@ class MyTreeWidget(QTreeWidget):
         self.setHeaderLabels(['ID', 'Name'])
 
         data = [
-            ('1', 'Category 1', [('1.1', 'Item 1.1'), ('1.2', 'Item 1.2')]),
-            ('2', 'Category 2', [('2.1', 'Item 2.1'), ('2.2', 'Item 2.2')]),
+            ('1', 'Category 1'),
+            ('2', 'Category 2'),
         ]
-        # self.addItemsRecursively(data)
+        self.addItemsRecursively(data)
 
-        self.layout = QVBoxLayout()
-        self.layout.addWidget(self)
+        self.layout = QVBoxLayout(self)
         self.setLayout(self.layout)
 
-    # def addItemsRecursively(self, data, parentItem=None):
-    #     for id_, name, items in data:
-    #         item = QTreeWidgetItem(parentItem)
-    #         item.setText(0, id_)
-    #         item.setText(1, name)
+    def addItemsRecursively(self, data, parentItem=None):
+        for id_, name in data:
+            item = QTreeWidgetItem(parentItem)
+            item.setText(0, id_)
+            item.setText(1, name)
 
-    #         if items:
-    #             self.addItemsRecursively(items, item)
-
-    #         if parentItem is None:
-    #             self.addTopLevelItem(item)
-    #         else:
-    #             parentItem.addChild(item)
+            if parentItem is None:
+                self.addTopLevelItem(item)
+            else:
+                parentItem.addChild(item)
 
 
 class HomeWidget(QWidget):
@@ -183,13 +179,11 @@ class HomeWidget(QWidget):
         self.layout = QVBoxLayout()
         self.headers = ["Fav", "Element", "Workstation", "Protocol", "User"]
         self.table_widget = MyTableWidget(self, parent.filtered_data)
-        self.table_widget2 = MyTableWidget(self, parent.filtered_data)
         self.select_grouping = self.create_select_grouping()
-        # self.tree_widget = MyTreeWidget(self, parent.filtered_data)
+        self.tree_widget = MyTreeWidget(self, parent.filtered_data)
         self.layout.addWidget(self.table_widget)
         self.layout.addWidget(self.select_grouping)
-        self.layout.addWidget(self.table_widget2)
-        # self.layout.addWidget(self.tree_widget)
+        self.layout.addWidget(self.tree_widget)
         self.setLayout(self.layout)
 
     def create_select_grouping(self):
