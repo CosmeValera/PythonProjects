@@ -10,25 +10,28 @@ class TreeTable(QWidget):
         self.tree.setHeaderLabels(['ID', 'Name'])
 
         data = [
-            ('1', 'Category 1', [('1.1', 'Item 1.1'), ('1.2', 'Item 1.2')]),
+            ('1', 'Category 1', [('1.1', 'Item 1.1', [('1.1.1', 'Subitem 1.1.1')])]),
             ('2', 'Category 2', [('2.1', 'Item 2.1'), ('2.2', 'Item 2.2')]),
         ]
+        self.addItemsRecursively(data)
 
-        for id_, name, items in data:
-            parent = QTreeWidgetItem()
-            parent.setText(0, id_)
-            parent.setText(1, name)
-            self.tree.addTopLevelItem(parent)
-            
-            for id_, name in items:
-                child = QTreeWidgetItem()
-                child.setText(0, id_)
-                child.setText(1, name)
-                parent.addChild(child)
-        
         self.layout = QVBoxLayout()
         self.layout.addWidget(self.tree)
         self.setLayout(self.layout)
+
+    def addItemsRecursively(self, data, parentItem=None):
+        for id_, name, items in data:
+            item = QTreeWidgetItem(parentItem)
+            item.setText(0, id_)
+            item.setText(1, name)
+
+            if items:
+                self.addItemsRecursively(items, item)
+
+            if parentItem is None:
+                self.addTopLevelItem(item)
+            else:
+                parentItem.addChild(item)
 
 app = QApplication(sys.argv)
 window = TreeTable()

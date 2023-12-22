@@ -1,14 +1,14 @@
 import sys
 from PyQt5.QtWidgets import (QApplication, QWidget, QVBoxLayout, QHBoxLayout, QLineEdit, QTableWidget,
 QTableWidgetItem, QPushButton, QSpacerItem, QSizePolicy, QShortcut, QLabel, QStackedWidget, QFrame,
-QCheckBox)
+QCheckBox, QComboBox)
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPalette, QColor
 from PyQt5.QtSvg import QSvgWidget
 from functools import partial
 from qtawesome import icon
 from qt_material import apply_stylesheet
-from guiStyles import FILTER_STYLES, SIDEBAR_STYLES, SIDEBAR_BUTTON_STYLES, SEPARATOR_STYLES, BUTTON_STYLES
+from guiStyles import *
 
 # MY PROJECT
 class MyTableWidget(QTableWidget):
@@ -223,6 +223,7 @@ class DataFilterApp(QWidget):
         self.sidebar_button_styles = SIDEBAR_BUTTON_STYLES
         apply_stylesheet(self, theme="gmvTheme.xml")
 
+        self.headers = ["Fav", "Element", "Workstation", "Protocol", "User"]
         self.ldap_user = "system"
         self.data = [
             {"fav": False, "elem": "Caja", "ws": "WS1", "prot": "IPV48", "user": "Bohe"},
@@ -248,14 +249,17 @@ class DataFilterApp(QWidget):
         self.stacked_widget.addWidget(self.settings_widget)
         ### END: Page layout ###
 
-        
+        ###############################################################################################################
         # Grouping
-        label_group = QPushButton("Group button")
-        label_group.setStyleSheet(BUTTON_STYLES)
-
+        self.select_grouping = QComboBox(self)
+        self.select_grouping.addItem("Group by...")
+        self.select_grouping.addItems(self.headers)
+        self.select_grouping.currentIndexChanged.connect(self.updateTreeView)
+        self.select_grouping.setStyleSheet(COMBO_BOX_STYLES)
 
         ### Filter layout ###
-        # Create a horizontal layout to organize the spacer, filter_input, and user_connection_layout
+        # Create a horizontal layout to organize the spacer,
+        # filter_input, and user_connection_layout
         self.filter_layout = QHBoxLayout()
         self.filter_layout.setContentsMargins(0, 5, 15, 5)
 
@@ -276,7 +280,6 @@ class DataFilterApp(QWidget):
         user_connection_layout.addWidget(user_icon, alignment=Qt.AlignCenter)
         user_connection_layout.addWidget(user_label, alignment=Qt.AlignCenter)
         ### END: Filter layout ###
-
 
         ### FILTER ###
         filter_input = QLineEdit(self)
@@ -312,11 +315,12 @@ class DataFilterApp(QWidget):
         ### PRINT ###
         self.print_button = QPushButton("Print Selected Session", self)
         self.print_button.clicked.connect(self.print_selected_session)
+        self.print_button.setStyleSheet(BUTTON_STYLES)
         ### END: PRINT ###
 
         ### Add layout ###
         self.filter_layout.addItem(QSpacerItem(0, 0, QSizePolicy.Expanding))
-        self.filter_layout.addWidget(label_group)
+        self.filter_layout.addWidget(self.select_grouping)
         self.filter_layout.addWidget(filter_input)
         self.filter_layout.addItem(QSpacerItem(10, 0, QSizePolicy.Fixed))
         self.filter_layout.addLayout(user_connection_layout)
@@ -335,6 +339,10 @@ class DataFilterApp(QWidget):
         self.setWindowTitle('Data Filter App')
         self.resize(950,400)
         self.show()
+
+    def updateTreeView(self, index):
+        header = self.select_grouping.currentText()
+        print(header)
 
     def create_menu_button(self, text, emoji, index):
         button_emoji = QPushButton(emoji)
