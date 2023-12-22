@@ -181,9 +181,28 @@ class HomeWidget(QWidget):
     def __init__(self, parent):
         super().__init__(parent)
         self.layout = QVBoxLayout()
+        self.headers = ["Fav", "Element", "Workstation", "Protocol", "User"]
         self.table_widget = MyTableWidget(self, parent.filtered_data)
+        self.select_grouping = self.create_select_grouping()
+        # self.tree_widget = MyTreeWidget(self, parent.filtered_data)
         self.layout.addWidget(self.table_widget)
+        self.layout.addWidget(self.select_grouping)
+        # self.layout.addWidget(self.tree_widget)
         self.setLayout(self.layout)
+
+    def create_select_grouping(self):
+        # Grouping
+        select_grouping = QComboBox(self)
+        select_grouping.addItem("Group by...")
+        select_grouping.addItems(self.headers)
+        select_grouping.currentIndexChanged.connect(self.updateTreeView)
+        select_grouping.setStyleSheet(COMBO_BOX_STYLES)
+        return select_grouping
+
+    def updateTreeView(self, index):
+        header = self.select_grouping.currentText()
+        print(header)
+
 
 class SettingsWidget(QWidget):
     def __init__(self, parent):
