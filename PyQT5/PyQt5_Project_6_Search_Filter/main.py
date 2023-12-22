@@ -183,10 +183,12 @@ class HomeWidget(QWidget):
         self.layout = QVBoxLayout()
         self.headers = ["Fav", "Element", "Workstation", "Protocol", "User"]
         self.table_widget = MyTableWidget(self, parent.filtered_data)
+        self.table_widget2 = MyTableWidget(self, parent.filtered_data)
         self.select_grouping = self.create_select_grouping()
         # self.tree_widget = MyTreeWidget(self, parent.filtered_data)
         self.layout.addWidget(self.table_widget)
         self.layout.addWidget(self.select_grouping)
+        self.layout.addWidget(self.table_widget2)
         # self.layout.addWidget(self.tree_widget)
         self.setLayout(self.layout)
 
@@ -387,7 +389,7 @@ class DataFilterApp(QWidget):
 
         self.setGeometry(100, 100, 800, 600)
         self.setWindowTitle('Data Filter App')
-        self.resize(950,400)
+        self.resize(950,700)
         self.show()
 
     def updateTreeView(self, index):
