@@ -1,7 +1,7 @@
 import sys
 from PyQt5.QtWidgets import (QApplication, QWidget, QVBoxLayout, QHBoxLayout, QLineEdit, QTableWidget,
 QTableWidgetItem, QPushButton, QSpacerItem, QSizePolicy, QShortcut, QLabel, QStackedWidget, QFrame,
-QCheckBox, QComboBox)
+QCheckBox, QComboBox, QTreeWidget, QTreeWidgetItem)
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPalette, QColor
 from PyQt5.QtSvg import QSvgWidget
@@ -144,6 +144,37 @@ class MyTableWidget(QTableWidget):
         selected_items = self.selectedItems()
         if not selected_items:
             self.parent().selected_session = None
+
+class MyTreeWidget(QTreeWidget):
+    def __init__(self, parent, dataaa):
+        super().__init__(parent)
+
+        self.setColumnCount(2)
+        self.setHeaderLabels(['ID', 'Name'])
+
+        data = [
+            ('1', 'Category 1', [('1.1', 'Item 1.1'), ('1.2', 'Item 1.2')]),
+            ('2', 'Category 2', [('2.1', 'Item 2.1'), ('2.2', 'Item 2.2')]),
+        ]
+        # self.addItemsRecursively(data)
+
+        self.layout = QVBoxLayout()
+        self.layout.addWidget(self)
+        self.setLayout(self.layout)
+
+    # def addItemsRecursively(self, data, parentItem=None):
+    #     for id_, name, items in data:
+    #         item = QTreeWidgetItem(parentItem)
+    #         item.setText(0, id_)
+    #         item.setText(1, name)
+
+    #         if items:
+    #             self.addItemsRecursively(items, item)
+
+    #         if parentItem is None:
+    #             self.addTopLevelItem(item)
+    #         else:
+    #             parentItem.addChild(item)
 
 
 class HomeWidget(QWidget):
