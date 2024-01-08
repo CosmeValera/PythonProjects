@@ -1,39 +1,45 @@
-from PyQt5.QtWidgets import QApplication, QTreeWidget, QTreeWidgetItem, QTableWidget, QTableWidgetItem, QVBoxLayout, QWidget
 import sys
+from PyQt5.QtWidgets import QApplication, QMainWindow, QTreeWidget, QTreeWidgetItem, QVBoxLayout, QWidget
 
-class TreeTable(QWidget):
+class TreeTable(QTreeWidget):
     def __init__(self):
         super().__init__()
-
-        self.tree = QTreeWidget()
-        self.tree.setColumnCount(2)
-        self.tree.setHeaderLabels(['ID', 'Name'])
-
         data = [
             ('1', 'Category 1', [('1.1', 'Item 1.1', [('1.1.1', 'Subitem 1.1.1')])]),
             ('2', 'Category 2', [('2.1', 'Item 2.1'), ('2.2', 'Item 2.2')]),
         ]
-        self.addItemsRecursively(data)
+        headers = ['Id', 'Name']
 
-        self.layout = QVBoxLayout()
-        self.layout.addWidget(self.tree)
-        self.setLayout(self.layout)
+        self.setColumnCount(len(headers))
 
-    def addItemsRecursively(self, data, parentItem=None):
-        for id_, name, items in data:
-            item = QTreeWidgetItem(parentItem)
-            item.setText(0, id_)
-            item.setText(1, name)
+        self.setHeaderLabels(headers)
+        self.addItemsRecursively(self, data)
 
-            if items:
-                self.addItemsRecursively(items, item)
+    def addItemsRecursively(self, parent, items):
+        for item in items:
+            currentItem = QTreeWidgetItem(parent, item[:2])
+            if len(item) > 2:
+                self.addItemsRecursively(currentItem, item[2])
 
-            if parentItem is None:
-                self.addTopLevelItem(item)
-            else:
-                parentItem.addChild(item)
+class MainWindow(QMainWindow):
+    def __init__(self):
+        super().__init__()
 
-app = QApplication(sys.argv)
-window = TreeTable()
-window.show()
-sys.exit(app.exec_())
+        # Set up the main window
+        self.setWindowTitle("TreeTable Example")
+        self.setGeometry(100, 100, 600, 400)
+
+        self.tree_table = TreeTable()
+
+        # Set up the main layout
+        central_widget = QWidget(self)
+        layout = QVBoxLayout(central_widget)
+        layout.addWidget(self.tree_table)
+
+        self.setCentralWidget(central_widget)
+
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    main_window = MainWindow()
+    main_window.show()
+    sys.exit(app.exec_())
