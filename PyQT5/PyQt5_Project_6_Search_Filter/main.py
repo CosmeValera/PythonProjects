@@ -203,9 +203,10 @@ class HomeWidget(QWidget):
         select_grouping.setStyleSheet(COMBO_BOX_STYLES)
         return select_grouping
 
+    # TOcar aqui, para q la treeview sea en funcion del dibujo q he puesto en la libreta y q haga lo q le digo
     def updateTreeView(self, index):
         header = self.select_grouping.currentText()
-        print(header)
+        print('here', header)
 
 
 class SettingsWidget(QWidget):
