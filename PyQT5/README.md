@@ -1,7 +1,18 @@
-## PyQt5_Project_6_Search_Filter is the main project
+## Important files:
 
-## C2WS image
-![](img/previous_C2WS.png)
+- PyQt5_Project_6_Search_Filter -> `main.py`
+
+It's the main project
+
+- PyQt5_Project_11_group_toggles_names -> `main4_treeTable.py`
+
+Example with a treeWidget
+
+- PyQt5_Project_13_tags -> `main.py`
+
+Example with tagBar, and also drag & drop.
+
+---
 
 ## 🚀 Getting Started
 To initiate a PyQt5 project, the initial steps involve installing PyQt5, PyQt5-tools, and PyInstaller. 
@@ -72,3 +83,6 @@ Open a terminal in the project folder and run the following command:
 python app.py
 ```
 This command will execute your PyQt5 application, and you should see the GUI you designed in Qt Designer.
+
+## C2WS image
+![](img/previous_C2WS.png)
