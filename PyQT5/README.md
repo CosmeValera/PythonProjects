@@ -8,7 +8,7 @@ It's the main project
 
 Example with a treeWidget
 
-- PyQt5_Project_13_tags -> `main.py`
+- PyQt5_Project_13_tags -> `main93_droppablearea`
 
 Example with tagBar, and also drag & drop.
 

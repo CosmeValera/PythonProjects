@@ -4,11 +4,22 @@ from PyQt5.QtCore import Qt, QMimeData
 from PyQt5.QtGui import QDrag
 
 class DraggableLabel(QLabel):
+    def __init__(self, text):
+        super().__init__(text)
+        self.setFrameShape(QFrame.Panel)
+        # self.setFrameShadow(QFrame.Raised)
+        self.setLineWidth(2)
+        self.setFixedSize(100, 30)
+        self.setAcceptDrops(True)
+        self.text = text
+
     def mousePressEvent(self, event):
         if event.button() == Qt.LeftButton:
             self.drag = QDrag(self)
-            mime_data = QMimeData()
-            self.drag.setMimeData(mime_data)
+            self.mime_data = QMimeData()
+            self.mime_data.setText(self.text)
+            self.drag.setMimeData(self.mime_data)
+            self.drag.setPixmap(self.grab())
             self.drag.exec_(Qt.MoveAction)
 
 class TagBar(QWidget):
@@ -23,6 +34,7 @@ class TagBar(QWidget):
 
     def dropEvent(self, event):
         print('Something was dropped in the TagBar')
+        text = event.mimeData().text()
         self.add_tag_to_bar(text)
         event.accept()
 
@@ -50,7 +62,11 @@ class TagBar(QWidget):
                 tag.deleteLater()
                 self.tags.remove(tag)
                 break
+
+        #Print  :)       
         print(f'Removed tag. Now there are {len(self.tags)} tags.')
+        for tag in self.tags:
+            print(tag.children()[1].text())
 
 
 class MainWindow(QMainWindow):
@@ -65,10 +81,12 @@ class MainWindow(QMainWindow):
         self.horizontal_layout_1 = QHBoxLayout()
         self.horizontal_layout_2 = QHBoxLayout()
 
-        self.label = DraggableLabel('Drag me')
+        self.label_1 = DraggableLabel('Drag me')
+        self.label_2 = DraggableLabel('Drag 2 me')
         self.tag_bar = TagBar()
 
-        self.horizontal_layout_1.addWidget(self.label)
+        self.horizontal_layout_1.addWidget(self.label_1)
+        self.horizontal_layout_1.addWidget(self.label_2)
         self.horizontal_layout_2.addWidget(self.tag_bar)
 
         self.vertical_layout.addLayout(self.horizontal_layout_1)
