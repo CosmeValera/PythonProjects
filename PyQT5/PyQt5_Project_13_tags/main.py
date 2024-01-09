@@ -1,5 +1,5 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QMainWindow, QSizePolicy, QVBoxLayout, QHBoxLayout, QWidget, QLineEdit, QLabel, QPushButton, QFrame
+from PyQt5.QtWidgets import QSizePolicy, QApplication, QMainWindow, QVBoxLayout, QHBoxLayout, QWidget, QLineEdit, QLabel, QPushButton, QFrame
 from PyQt5.QtCore import Qt, QMimeData
 from PyQt5.QtGui import QDrag
 
@@ -14,8 +14,12 @@ class DraggableLabel(QLabel):
 
     def mousePressEvent(self, event):
         if event.button() == Qt.LeftButton:
-            new_label = DraggableLabel(self.text())
-            new_label.show()
+            drag = QDrag(self)
+            mime_data = QMimeData()
+            mime_data.setText(self.text())
+            drag.setMimeData(mime_data)
+            drag.setPixmap(self.grab())
+            drag.exec_(Qt.MoveAction)
 
 class TagBar(QWidget):
     def __init__(self):
@@ -70,6 +74,15 @@ class TagBar(QWidget):
 
     def remove_tag(self, text):
         self.tags.remove(text)
+        self.refresh()
+
+    def dragEnterEvent(self, event):
+        if event.mimeData().hasText():
+            event.acceptProposedAction()
+
+    def dropEvent(self, event):
+        text = event.mimeData().text()
+        self.tags.append(text)
         self.refresh()
 
 class MainWindow(QMainWindow):
