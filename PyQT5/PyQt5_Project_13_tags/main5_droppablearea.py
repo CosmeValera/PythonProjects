@@ -7,7 +7,6 @@ class DraggableLabel(QLabel):
     def __init__(self, text):
         super().__init__(text)
         self.setFrameShape(QFrame.Panel)
-        # self.setFrameShadow(QFrame.Raised)
         self.setLineWidth(2)
         self.setFixedSize(100, 30)
         self.setAcceptDrops(True)
