@@ -175,13 +175,12 @@ class MainWindow(QMainWindow):
 
             # Extract distinct values for the current tag from emptyData
             distinct_values = set(item[tag_name] for item in self.emptyData)
-
             # Generate main lines
             main_lines = [(f"{tag_name}={value}", '', '') for value in distinct_values]
 
             # Generate sub-lines
-            sub_lines = []
             for main_line in main_lines:
+                sub_lines = []
                 main_value = main_line[0].split('=')[1]
                 main_value_bool = True if main_value.lower() == 'true' else False
 
@@ -195,13 +194,9 @@ class MainWindow(QMainWindow):
                             ('', main_value, str(item['Name']))
                         ])
                 print("SUblines:", sub_lines)
+                data.append((main_line[0], main_line[1], main_line[2], [item for sublist in sub_lines for item in sublist]))
 
-            # Combine main and sub-lines
-            combined_lines = [(main_line[0], main_line[1], main_line[2], sub_line) for main_line, sub_line in zip(main_lines, sub_lines)]
-
-            # Extend data with the combined lines
-            data.extend(combined_lines)
-
+        print("data: ", data)
         self.horizontal_layout_2.removeWidget(self.tree_table)
         self.tree_table = TreeTableGrouping(data, headers)
         self.horizontal_layout_2.addWidget(self.tree_table)
