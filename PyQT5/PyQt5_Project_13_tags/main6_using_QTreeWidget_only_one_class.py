@@ -3,21 +3,6 @@ from PyQt5.QtWidgets import QApplication, QHeaderView, QTreeWidget, QTreeWidgetI
 from PyQt5.QtCore import Qt, QMimeData
 from PyQt5.QtGui import QDrag, QPixmap
 
-class DraggableHeaderView(QHeaderView):
-    def __init__(self, orientation, parent):
-        super().__init__(orientation, parent)
-
-    def mousePressEvent(self, event):
-        if event.button() == Qt.LeftButton:
-            index = self.logicalIndexAt(event.pos())
-            if index != -1:
-                item_text = self.model().headerData(index, self.orientation())
-                drag = QDrag(self)
-                mime_data = QMimeData()
-                mime_data.setText(item_text)
-                drag.setMimeData(mime_data)
-                drag.exec_(Qt.MoveAction)
-
 class TreeTable(QTreeWidget):
     def __init__(self):
         super().__init__()
@@ -31,7 +16,7 @@ class TreeTable(QTreeWidget):
         self.setHeaderLabels(headers)
         self.addItemsRecursively(self, data)
 
-        header = DraggableHeaderView(Qt.Horizontal, self)
+        header = self.DraggableHeaderView(Qt.Horizontal, self)
         self.setHeader(header)
 
     def addItemsRecursively(self, parent, items):
@@ -39,6 +24,22 @@ class TreeTable(QTreeWidget):
             currentItem = QTreeWidgetItem(parent, item[:2])
             if len(item) > 2:
                 self.addItemsRecursively(currentItem, item[2])
+
+    class DraggableHeaderView(QHeaderView):
+        def __init__(self, orientation, parent):
+            super().__init__(orientation, parent)
+
+        def mousePressEvent(self, event):
+            if event.button() == Qt.LeftButton:
+                index = self.logicalIndexAt(event.pos())
+                if index != -1:
+                    item_text = self.model().headerData(index, self.orientation())
+                    drag = QDrag(self)
+                    mime_data = QMimeData()
+                    mime_data.setText(item_text)
+                    drag.setMimeData(mime_data)
+                    drag.exec_(Qt.MoveAction)
+
 
 class TagBar(QWidget):
     def __init__(self):
