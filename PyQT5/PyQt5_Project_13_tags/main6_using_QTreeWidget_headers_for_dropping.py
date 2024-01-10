@@ -1,25 +1,44 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QPushButton, QWidget, QVBoxLayout, QHBoxLayout, QLabel, QMainWindow, QFrame
+from PyQt5.QtWidgets import QApplication, QHeaderView, QTreeWidget, QTreeWidgetItem, QPushButton, QWidget, QVBoxLayout, QHBoxLayout, QLabel, QMainWindow, QFrame
 from PyQt5.QtCore import Qt, QMimeData
-from PyQt5.QtGui import QDrag
+from PyQt5.QtGui import QDrag, QPixmap
 
-class DraggableLabel(QLabel):
-    def __init__(self, text):
-        super().__init__(text)
-        self.setFrameShape(QFrame.Panel)
-        self.setLineWidth(2)
-        self.setFixedSize(100, 30)
-        self.setAcceptDrops(True)
-        self.text = text
+class DraggableHeaderView(QHeaderView):
+    def __init__(self, orientation, parent):
+        super().__init__(orientation, parent)
 
     def mousePressEvent(self, event):
         if event.button() == Qt.LeftButton:
-            self.drag = QDrag(self)
-            self.mime_data = QMimeData()
-            self.mime_data.setText(self.text)
-            self.drag.setMimeData(self.mime_data)
-            self.drag.setPixmap(self.grab())
-            self.drag.exec_(Qt.MoveAction)
+            index = self.logicalIndexAt(event.pos())
+            if index != -1:
+                item_text = self.model().headerData(index, self.orientation())
+                drag = QDrag(self)
+                mime_data = QMimeData()
+                mime_data.setText(item_text)
+                drag.setMimeData(mime_data)
+                drag.exec_(Qt.MoveAction)
+
+class TreeTable(QTreeWidget):
+    def __init__(self):
+        super().__init__()
+        data = [
+            ('1', 'Category 1', [('1.1', 'Item 1.1', [('1.1.1', 'Subitem 1.1.1')])]),
+            ('2', 'Category 2', [('2.1', 'Item 2.1'), ('2.2', 'Item 2.2')]),
+        ]
+        headers = ['Id', 'Name']
+
+        self.setColumnCount(len(headers))
+        self.setHeaderLabels(headers)
+        self.addItemsRecursively(self, data)
+
+        header = DraggableHeaderView(Qt.Horizontal, self)
+        self.setHeader(header)
+
+    def addItemsRecursively(self, parent, items):
+        for item in items:
+            currentItem = QTreeWidgetItem(parent, item[:2])
+            if len(item) > 2:
+                self.addItemsRecursively(currentItem, item[2])
 
 class TagBar(QWidget):
     def __init__(self):
@@ -80,13 +99,11 @@ class MainWindow(QMainWindow):
         self.horizontal_layout_1 = QHBoxLayout()
         self.horizontal_layout_2 = QHBoxLayout()
 
-        self.label_1 = DraggableLabel('Drag me')
-        self.label_2 = DraggableLabel('Drag 2 me')
         self.tag_bar = TagBar()
+        self.tree_table = TreeTable()
 
         self.horizontal_layout_1.addWidget(self.tag_bar)
-        self.horizontal_layout_2.addWidget(self.label_1)
-        self.horizontal_layout_2.addWidget(self.label_2)
+        self.horizontal_layout_2.addWidget(self.tree_table)
 
         self.vertical_layout.addLayout(self.horizontal_layout_1)
         self.vertical_layout.addLayout(self.horizontal_layout_2)
