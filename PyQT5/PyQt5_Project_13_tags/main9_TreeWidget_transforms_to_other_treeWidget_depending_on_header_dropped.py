@@ -4,16 +4,8 @@ from PyQt5.QtCore import Qt, QMimeData
 from PyQt5.QtGui import QDrag, QPixmap
 
 class TreeTableEmpty(QTreeWidget):
-    def __init__(self):
+    def __init__(self, data, headers):
         super().__init__()
-        data = [
-            ('false', '1'),
-            ('false', '2'),
-            ('true', '3'),
-            ('true', '4'),
-        ]
-        headers = ['Fav', 'Name']
-
         self.setColumnCount(len(headers))
         self.setHeaderLabels(headers)
         self.addItemsRecursively(self, data)
@@ -43,14 +35,9 @@ class TreeTableEmpty(QTreeWidget):
                     drag.exec_(Qt.MoveAction)
 
 class TreeTableGrouping(QTreeWidget):
-    def __init__(self):
+    def __init__(self, data, headers):
         super().__init__()
-        data = [
-            ('fav=false', '', '', [('', 'false', '1'), ('', 'false', '2')]),
-            ('fav=true', '', '', [('', 'true', '3'), ('', 'true', '4')]),
-        ]
-        headers = ['Group by', 'Fav', 'Name']
-
+        
         self.setColumnCount(len(headers))
         self.setHeaderLabels(headers)
         self.addItemsRecursively(self, data)
@@ -134,6 +121,14 @@ class TagBar(QWidget):
 
 
 class MainWindow(QMainWindow):
+    emptyData = [
+        ('false', '1'),
+        ('false', '2'),
+        ('true', '3'),
+        ('true', '4'),
+    ]
+    emptyHeaders = ['Fav', 'Name']
+    
     def __init__(self):
         super().__init__()
 
@@ -146,7 +141,7 @@ class MainWindow(QMainWindow):
         self.horizontal_layout_2 = QHBoxLayout()
 
         self.tag_bar = TagBar(self.update_tree_table)
-        self.tree_table = TreeTableEmpty()
+        self.tree_table = TreeTableEmpty(self.emptyData, self.emptyHeaders)
 
         self.horizontal_layout_1.addWidget(self.tag_bar)
         self.horizontal_layout_2.addWidget(self.tree_table)
@@ -157,11 +152,16 @@ class MainWindow(QMainWindow):
     def update_tree_table(self, tags):
         if not tags:
             self.horizontal_layout_2.removeWidget(self.tree_table)
-            self.tree_table = TreeTableEmpty()
+            self.tree_table = TreeTableEmpty(self.emptyData, self.emptyHeaders)
             self.horizontal_layout_2.addWidget(self.tree_table)
         else:
+            data = [
+                ('fav=false', '', '', [('', 'false', '1'), ('', 'false', '2')]),
+                ('fav=true', '', '', [('', 'true', '3'), ('', 'true', '4')]),
+            ]
+            headers = ['Group by', 'Fav', 'Name']
             self.horizontal_layout_2.removeWidget(self.tree_table)
-            self.tree_table = TreeTableGrouping()
+            self.tree_table = TreeTableGrouping(data, headers)
             self.horizontal_layout_2.addWidget(self.tree_table)
 
 app = QApplication(sys.argv)
