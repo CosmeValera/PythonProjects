@@ -81,11 +81,12 @@ class TreeTableAfter(QTreeWidget):
 
 
 class TagBar(QWidget):
-    def __init__(self):
+    def __init__(self, tree_table_callback):
         super().__init__()
         self.setAcceptDrops(True)
         self.tags = []
         self.h_layout = QHBoxLayout(self)
+        self.tree_table_callback = tree_table_callback
 
     def dragEnterEvent(self, event):
         event.accept()
@@ -113,6 +114,8 @@ class TagBar(QWidget):
         self.h_layout.addWidget(tag)
         self.tags.append(tag)
 
+        self.tree_table_callback(self.tags)
+
     def remove_tag(self, text):
         for tag in self.tags:
             if tag.children()[1].text() == text:
@@ -121,10 +124,13 @@ class TagBar(QWidget):
                 self.tags.remove(tag)
                 break
 
+        self.tree_table_callback(self.tags)
+
         #Print  :)       
         print(f'Removed tag. Now there are {len(self.tags)} tags.')
         for tag in self.tags:
             print(tag.children()[1].text())
+            print(self.tags)
 
 
 class MainWindow(QMainWindow):
@@ -139,7 +145,7 @@ class MainWindow(QMainWindow):
         self.horizontal_layout_1 = QHBoxLayout()
         self.horizontal_layout_2 = QHBoxLayout()
 
-        self.tag_bar = TagBar()
+        self.tag_bar = TagBar(self.update_tree_table)
         self.tree_table = TreeTableBefore()
 
         self.horizontal_layout_1.addWidget(self.tag_bar)
@@ -147,6 +153,16 @@ class MainWindow(QMainWindow):
 
         self.vertical_layout.addLayout(self.horizontal_layout_1)
         self.vertical_layout.addLayout(self.horizontal_layout_2)
+
+    def update_tree_table(self, tags):
+        if tags:
+            self.horizontal_layout_2.removeWidget(self.tree_table)
+            self.tree_table = TreeTableAfter()
+            self.horizontal_layout_2.addWidget(self.tree_table)
+        else:
+            self.horizontal_layout_2.removeWidget(self.tree_table)
+            self.tree_table = TreeTableBefore()
+            self.horizontal_layout_2.addWidget(self.tree_table)
 
 app = QApplication(sys.argv)
 window = MainWindow()
