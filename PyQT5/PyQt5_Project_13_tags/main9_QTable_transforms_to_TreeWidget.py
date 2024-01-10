@@ -167,11 +167,22 @@ class MainWindow(QMainWindow):
         self.horizontal_layout_2.addWidget(self.tree_table)
 
     def createTreeTableGrouping(self, tags):
-        data = [
-            ('fav=false', '', '', [('', 'false', '1'), ('', 'false', '2')]),
-            ('fav=true', '', '', [('', 'true', '3'), ('', 'true', '4')]),
-        ]
         headers = ['Group by', 'Fav', 'Name']
+        
+        data = []
+        if any((tag.children()[1].text() == "Fav") for tag in tags):
+            data = [
+                ('Fav=false', '', '', [('', 'false', '1'), ('', 'false', '2')]),
+                ('Fav=true', '', '', [('', 'true', '3'), ('', 'true', '4')]),
+            ]
+        elif any((tag.children()[1].text() == "Name") for tag in tags):
+            data = [
+                ('Name=1', '', '', [('', 'false', '1')]),
+                ('Name=2', '', '', [('', 'false', '2')]),
+                ('Name=3', '', '', [('', 'true', '3')]),
+                ('Name=4', '', '', [('', 'true', '4')]),
+            ]
+
         self.horizontal_layout_2.removeWidget(self.tree_table)
         self.tree_table = TreeTableGrouping(data, headers)
         self.horizontal_layout_2.addWidget(self.tree_table)
