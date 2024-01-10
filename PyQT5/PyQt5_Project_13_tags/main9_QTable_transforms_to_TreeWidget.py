@@ -1,23 +1,29 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QHeaderView, QTreeWidget, QTreeWidgetItem, QPushButton, QWidget, QVBoxLayout, QHBoxLayout, QLabel, QMainWindow, QFrame
+from PyQt5.QtWidgets import QApplication, QTableWidget, QTableWidgetItem, QHeaderView, QTreeWidget, QTreeWidgetItem, QPushButton, QWidget, QVBoxLayout, QHBoxLayout, QLabel, QMainWindow, QFrame
 from PyQt5.QtCore import Qt, QMimeData
 from PyQt5.QtGui import QDrag, QPixmap
 
-class TreeTableEmpty(QTreeWidget):
+class EmptyTable(QTableWidget):
     def __init__(self, data, headers):
         super().__init__()
-        self.setColumnCount(len(headers))
-        self.setHeaderLabels(headers)
-        self.addItemsRecursively(self, data)
+
+        self.headers = headers
+        self.data = data
+
+        self.setColumnCount(len(self.headers))
+        self.setHorizontalHeaderLabels(self.headers)
+        self.setRowCount(len(self.data))
+
+        self.populateTable()
 
         header = self.DraggableHeaderView(Qt.Horizontal, self)
-        self.setHeader(header)
+        self.setHorizontalHeader(header)
 
-    def addItemsRecursively(self, parent, items):
-        for item in items:
-            currentItem = QTreeWidgetItem(parent, item[:2])
-            if len(item) > 2:
-                self.addItemsRecursively(currentItem, item[2])
+    def populateTable(self):
+        for row, rowData in enumerate(self.data):
+            for col, key in enumerate(self.headers):
+                item = QTableWidgetItem(str(rowData[key]))
+                self.setItem(row, col, item)
 
     class DraggableHeaderView(QHeaderView):
         def __init__(self, orientation, parent):
@@ -122,10 +128,10 @@ class TagBar(QWidget):
 
 class MainWindow(QMainWindow):
     emptyData = [
-        ('false', '1'),
-        ('false', '2'),
-        ('true', '3'),
-        ('true', '4'),
+        {'Fav': False, 'Name': 1},
+        {'Fav': False, 'Name': 2},
+        {'Fav': True, 'Name': 3},
+        {'Fav': True, 'Name': 4},
     ]
     emptyHeaders = ['Fav', 'Name']
     
@@ -141,7 +147,7 @@ class MainWindow(QMainWindow):
         self.horizontal_layout_2 = QHBoxLayout()
 
         self.tag_bar = TagBar(self.update_tree_table)
-        self.tree_table = TreeTableEmpty(self.emptyData, self.emptyHeaders)
+        self.tree_table = EmptyTable(self.emptyData, self.emptyHeaders)
 
         self.horizontal_layout_1.addWidget(self.tag_bar)
         self.horizontal_layout_2.addWidget(self.tree_table)
@@ -150,19 +156,25 @@ class MainWindow(QMainWindow):
         self.vertical_layout.addLayout(self.horizontal_layout_2)
 
     def update_tree_table(self, tags):
-        if not tags:
-            self.horizontal_layout_2.removeWidget(self.tree_table)
-            self.tree_table = TreeTableEmpty(self.emptyData, self.emptyHeaders)
-            self.horizontal_layout_2.addWidget(self.tree_table)
+        if tags:
+            self.createTreeTableGrouping(tags)
         else:
-            data = [
-                ('fav=false', '', '', [('', 'false', '1'), ('', 'false', '2')]),
-                ('fav=true', '', '', [('', 'true', '3'), ('', 'true', '4')]),
-            ]
-            headers = ['Group by', 'Fav', 'Name']
-            self.horizontal_layout_2.removeWidget(self.tree_table)
-            self.tree_table = TreeTableGrouping(data, headers)
-            self.horizontal_layout_2.addWidget(self.tree_table)
+            self.createEmptyTable()
+    
+    def createEmptyTable(self):
+        self.horizontal_layout_2.removeWidget(self.tree_table)
+        self.tree_table = EmptyTable(self.emptyData, self.emptyHeaders)
+        self.horizontal_layout_2.addWidget(self.tree_table)
+
+    def createTreeTableGrouping(self, tags):
+        data = [
+            ('fav=false', '', '', [('', 'false', '1'), ('', 'false', '2')]),
+            ('fav=true', '', '', [('', 'true', '3'), ('', 'true', '4')]),
+        ]
+        headers = ['Group by', 'Fav', 'Name']
+        self.horizontal_layout_2.removeWidget(self.tree_table)
+        self.tree_table = TreeTableGrouping(data, headers)
+        self.horizontal_layout_2.addWidget(self.tree_table)
 
 app = QApplication(sys.argv)
 window = MainWindow()
