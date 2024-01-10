@@ -183,9 +183,18 @@ class MainWindow(QMainWindow):
             sub_lines = []
             for main_line in main_lines:
                 main_value = main_line[0].split('=')[1]
-                sub_lines.append([
-                    ('', main_value, str(item['Name'])) for item in self.emptyData if item[tag_name] == main_value
-                ])
+                main_value_bool = True if main_value.lower() == 'true' else False
+
+                for item in self.emptyData:
+                    print("tagname", item[tag_name])
+                    print("value of main line", main_value_bool)
+                    print("result", item[tag_name] == main_value_bool)
+                    if item[tag_name] == main_value_bool:
+                        print("ENTRADOO str(item['Name'])", str(item['Name']))
+                        sub_lines.append([
+                            ('', main_value, str(item['Name']))
+                        ])
+                print("SUblines:", sub_lines)
 
             # Combine main and sub-lines
             combined_lines = [(main_line[0], main_line[1], main_line[2], sub_line) for main_line, sub_line in zip(main_lines, sub_lines)]
