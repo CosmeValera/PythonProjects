@@ -129,12 +129,12 @@ class TagBar(QWidget):
 
 class MainWindow(QMainWindow):
     empty_data = [
-        {'Fav': 'False', 'Name': '1'},
-        {'Fav': 'False', 'Name': '2'},
-        {'Fav': 'True', 'Name': '3'},
-        {'Fav': 'True', 'Name': '4'},
+        {'Fav': 'False', 'Name': '1', 'Life': '1'},
+        {'Fav': 'False', 'Name': '2', 'Life': '1'},
+        {'Fav': 'True', 'Name': '3', 'Life': '2'},
+        {'Fav': 'True', 'Name': '4', 'Life': '2'},
     ]
-    empty_headers = ['Fav', 'Name']
+    empty_headers = ['Fav', 'Name', 'Life']
     group_headers = ['Group by'] + empty_headers
     
     def __init__(self):
@@ -182,7 +182,7 @@ class MainWindow(QMainWindow):
             # Extract distinct values for the current tag from empty_data
             distinct_values = set(item[tag_value] for item in self.empty_data)
             # Generate main lines
-            main_lines = [(f"{tag_value}={value}", '', '') for value in distinct_values]
+            main_lines = [(f"{tag_value}={value}", '', '', '') for value in distinct_values]
 
             # Generate sub-lines
             for main_line in main_lines:
@@ -191,16 +191,12 @@ class MainWindow(QMainWindow):
                 print(main_line_value, tag_value, main_line_value == tag_value)
 
                 for item in self.empty_data:
-                    print("tagname", item[tag_value])
-                    print("value of main line", main_line_value)
-                    print("result", item[tag_value] == main_line_value)
                     if item[tag_value] == main_line_value:
-                        print("ENTRADOO str(item['Name'])", str(item['Name']))
                         sub_lines.append([
-                            ('', str(item['Fav']), str(item['Name']))
+                            ('', str(item['Fav']), str(item['Name']), str(item['Life']))
                         ])
                 print("Sublines:", sub_lines)
-                data.append((main_line[0], main_line[1], main_line[2], [item for sublist in sub_lines for item in sublist]))
+                data.append((main_line[0], main_line[1], main_line[2], main_line[3], [item for sublist in sub_lines for item in sublist]))
 
         print("data: ", data)
         self.horizontal_layout_2.removeWidget(self.tree_table)
