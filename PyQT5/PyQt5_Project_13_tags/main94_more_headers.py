@@ -172,24 +172,20 @@ class MainWindow(QMainWindow):
         self.horizontal_layout_2.addWidget(self.tree_table)
 
 
-    # tag_value = 'Fav' / 'Name'
-    # main_line_value = 'False' / '1'
+    # tag_value = 'Fav' / 'Name'; main_line_value = 'False' / '1'
     def createTreeTableGrouping(self, tags):
         data = []
         for tag in tags:
             tag_value = tag.children()[1].text()
 
             distinct_values = set(item[tag_value] for item in self.base_data)
-            #1
-            main_lines = [(f"{tag_value}={value}",) + ('',) * len(self.base_headers) for value in distinct_values]
-
+            main_lines = [(f"{tag_value}:{value}",) + ('',) * len(self.base_headers) for value in distinct_values]
 
             # Generate sub-lines
             for main_line in main_lines:
                 print("Main_line", main_line)
                 sub_lines = []
                 main_line_value = main_line[0].split('=')[1]
-                # print(main_line_value, tag_value, main_line_value == tag_value)
 
                 for item in self.base_data:
                     if item[tag_value] == main_line_value:
