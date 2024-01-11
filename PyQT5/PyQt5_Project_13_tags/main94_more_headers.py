@@ -181,22 +181,21 @@ class MainWindow(QMainWindow):
 
             distinct_values = set(item[tag_value] for item in self.base_data)
             #1
-            main_lines = [(f"{tag_value}={value}", '', '', '') for value in distinct_values] 
+            main_lines = [(f"{tag_value}={value}",) + ('',) * len(self.base_headers) for value in distinct_values]
+
 
             # Generate sub-lines
             for main_line in main_lines:
+                print("Main_line", main_line)
                 sub_lines = []
                 main_line_value = main_line[0].split('=')[1]
-                print(main_line_value, tag_value, main_line_value == tag_value)
+                # print(main_line_value, tag_value, main_line_value == tag_value)
 
                 for item in self.base_data:
                     if item[tag_value] == main_line_value:
-                        #2
-                        sub_lines.append([
-                            ('', str(item['Fav']), str(item['Name']), str(item['Life'])) 
-                        ])
-                #3
-                data.append((main_line[0], main_line[1], main_line[2], main_line[3], [item for sublist in sub_lines for item in sublist]))
+                        sub_lines.append([('',) + tuple(str(item[header]) for header in self.base_headers)])
+
+                data.append((*main_line, [item for sub_line in sub_lines for item in sub_line]))
                 print("Sublines:", sub_lines)
 
         self.horizontal_layout_2.removeWidget(self.tree_table)
