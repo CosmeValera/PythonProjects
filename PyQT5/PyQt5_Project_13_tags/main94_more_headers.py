@@ -175,6 +175,8 @@ class MainWindow(QMainWindow):
     # tag_value = 'Fav' / 'Name'; main_line_value = 'False' / '1'
     def createTreeTableGrouping(self, tags):
         data = []
+
+        # TODO: restructure all of this to allow sublelevels in main_lines for grouping based on 2+ tags
         for tag in tags:
             tag_value = tag.children()[1].text()
 
