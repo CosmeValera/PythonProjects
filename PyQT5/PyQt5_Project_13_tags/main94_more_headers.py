@@ -128,14 +128,14 @@ class TagBar(QWidget):
 
 
 class MainWindow(QMainWindow):
-    empty_data = [
+    base_data = [
         {'Fav': 'False', 'Name': '1', 'Life': '1'},
         {'Fav': 'False', 'Name': '2', 'Life': '1'},
         {'Fav': 'True', 'Name': '3', 'Life': '2'},
         {'Fav': 'True', 'Name': '4', 'Life': '2'},
     ]
-    empty_headers = ['Fav', 'Name', 'Life']
-    group_headers = ['Group by'] + empty_headers
+    base_headers = ['Fav', 'Name', 'Life']
+    group_headers = ['Group by'] + base_headers
     
     def __init__(self):
         super().__init__()
@@ -149,7 +149,7 @@ class MainWindow(QMainWindow):
         self.horizontal_layout_2 = QHBoxLayout()
 
         self.tag_bar = TagBar(self.update_tree_table)
-        self.tree_table = EmptyTable(self.empty_data, self.empty_headers)
+        self.tree_table = EmptyTable(self.base_data, self.base_headers)
 
         self.horizontal_layout_1.addWidget(self.tag_bar)
         self.horizontal_layout_2.addWidget(self.tree_table)
@@ -168,7 +168,7 @@ class MainWindow(QMainWindow):
     
     def createEmptyTable(self):
         self.horizontal_layout_2.removeWidget(self.tree_table)
-        self.tree_table = EmptyTable(self.empty_data, self.empty_headers)
+        self.tree_table = EmptyTable(self.base_data, self.base_headers)
         self.horizontal_layout_2.addWidget(self.tree_table)
 
 
@@ -179,10 +179,9 @@ class MainWindow(QMainWindow):
         for tag in tags:
             tag_value = tag.children()[1].text()
 
-            # Extract distinct values for the current tag from empty_data
-            distinct_values = set(item[tag_value] for item in self.empty_data)
-            # Generate main lines
-            main_lines = [(f"{tag_value}={value}", '', '', '') for value in distinct_values]
+            distinct_values = set(item[tag_value] for item in self.base_data)
+            #1
+            main_lines = [(f"{tag_value}={value}", '', '', '') for value in distinct_values] 
 
             # Generate sub-lines
             for main_line in main_lines:
@@ -190,18 +189,20 @@ class MainWindow(QMainWindow):
                 main_line_value = main_line[0].split('=')[1]
                 print(main_line_value, tag_value, main_line_value == tag_value)
 
-                for item in self.empty_data:
+                for item in self.base_data:
                     if item[tag_value] == main_line_value:
+                        #2
                         sub_lines.append([
-                            ('', str(item['Fav']), str(item['Name']), str(item['Life']))
+                            ('', str(item['Fav']), str(item['Name']), str(item['Life'])) 
                         ])
-                print("Sublines:", sub_lines)
+                #3
                 data.append((main_line[0], main_line[1], main_line[2], main_line[3], [item for sublist in sub_lines for item in sublist]))
+                print("Sublines:", sub_lines)
 
-        print("data: ", data)
         self.horizontal_layout_2.removeWidget(self.tree_table)
         self.tree_table = TreeTableGrouping(data, self.group_headers)
         self.horizontal_layout_2.addWidget(self.tree_table)
+        print("data: ", data)
 
 app = QApplication(sys.argv)
 window = MainWindow()
