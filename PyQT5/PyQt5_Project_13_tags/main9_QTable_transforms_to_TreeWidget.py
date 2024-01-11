@@ -170,17 +170,38 @@ class MainWindow(QMainWindow):
         headers = ['Group by', 'Fav', 'Name']
         
         data = []
-        if any((tag.children()[1].text() == "Fav") for tag in tags):
+        if any((tag.children()[1].text() == "Fav") for tag in tags) and any((tag.children()[1].text() == "Name") for tag in tags):
             data = [
-                ('Fav=false', '', '', [('', 'false', '1'), ('', 'false', '2')]),
-                ('Fav=true', '', '', [('', 'true', '3'), ('', 'true', '4')]),
+                ('Fav=false', '', '', 
+                    [('Name=1', '', '',
+                        [('', 'false', '1')]),
+                    ('Name=2', '', '',
+                        [('', 'false', '2')])]),
+                ('Fav=true', '', '', 
+                    [('Name=3', '', '',
+                        [('', 'true', '3')]),
+                    ('Name=4', '', '',
+                        [('', 'true', '4')])]),
+            ]
+        elif any((tag.children()[1].text() == "Fav") for tag in tags):
+            data = [
+                ('Fav=false', '', '', 
+                    [('', 'false', '1'),
+                    ('', 'false', '2')]),
+                ('Fav=true', '', '', 
+                    [('', 'true', '3'),
+                    ('', 'true', '4')]),
             ]
         elif any((tag.children()[1].text() == "Name") for tag in tags):
             data = [
-                ('Name=1', '', '', [('', 'false', '1')]),
-                ('Name=2', '', '', [('', 'false', '2')]),
-                ('Name=3', '', '', [('', 'true', '3')]),
-                ('Name=4', '', '', [('', 'true', '4')]),
+                ('Name=1', '', '',
+                    [('', 'false', '1')]),
+                ('Name=2', '', '',
+                    [('', 'false', '2')]),
+                ('Name=3', '', '',
+                    [('', 'true', '3')]),
+                ('Name=4', '', '',
+                    [('', 'true', '4')]),
             ]
 
         self.horizontal_layout_2.removeWidget(self.tree_table)
