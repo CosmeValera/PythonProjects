@@ -129,13 +129,13 @@ class TagBar(QWidget):
 
 class MainWindow(QMainWindow):
     base_data = [
-        {'Fav': 'False', 'Name': '1', 'Life': '1'},
-        {'Fav': 'False', 'Name': '2', 'Life': '1'},
-        {'Fav': 'True', 'Name': '3', 'Life': '2'},
-        {'Fav': 'True', 'Name': '4', 'Life': '2'},
+        {'Fav': 'False', 'Name': '1', 'Life': '1', 'Branch': 'Surgery'},
+        {'Fav': 'False', 'Name': '2', 'Life': '1', 'Branch': 'Tree'},
+        {'Fav': 'True', 'Name': '3', 'Life': '2', 'Branch': 'Surgery'},
+        {'Fav': 'True', 'Name': '4', 'Life': '2', 'Branch': 'Tree'},
     ]
-    base_headers = ['Fav', 'Name', 'Life']
-    group_headers = ['Group by'] + base_headers
+    base_headers = ['Fav', 'Name', 'Life', 'Branch']
+    group_headers = [''] + base_headers
     
     def __init__(self):
         super().__init__()
@@ -158,7 +158,7 @@ class MainWindow(QMainWindow):
         self.vertical_layout.addLayout(self.horizontal_layout_2)
 
         self.setWindowTitle('Tagbar')
-        self.resize(650, 400)
+        self.resize(750, 400)
 
     def update_tree_table(self, tags):
         if tags:
