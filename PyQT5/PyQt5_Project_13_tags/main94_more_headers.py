@@ -135,7 +135,7 @@ class MainWindow(QMainWindow):
         {'Fav': 'True', 'Name': '4'},
     ]
     empty_headers = ['Fav', 'Name']
-    group_headers = ['Group by', 'Fav', 'Name']
+    group_headers = ['Group by'] + empty_headers
     
     def __init__(self):
         super().__init__()
