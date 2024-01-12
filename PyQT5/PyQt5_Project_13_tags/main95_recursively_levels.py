@@ -186,7 +186,11 @@ class MainWindow(QMainWindow):
         if level < len(tags):
             current_tag = tags[level]
             tag_value = current_tag.children()[1].text()
-            distinct_values = set(item[tag_value] for item in data)
+            
+            # Filter data based on conditions
+            filtered_data = [item for item in data if all(item[condition_tag] == condition_value for condition in conditions for condition_tag, condition_value in condition.items())]
+            # Get distinct values from the filtered data
+            distinct_values = set(item[tag_value] for item in filtered_data)
             
             for value in distinct_values:
                 main_line = (f"{tag_value}={value}",) + ('',) * len(self.base_headers)
