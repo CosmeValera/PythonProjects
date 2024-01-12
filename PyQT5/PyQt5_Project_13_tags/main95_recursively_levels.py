@@ -208,8 +208,8 @@ class MainWindow(QMainWindow):
 
         else:
             # Calculate sub_lines only at the last level
-            for item in data:
-                all_sub_lines.append([('',) + tuple(str(item[header]) for header in self.base_headers)])
+            for row in data:
+                all_sub_lines.append([('',) + tuple(str(row[header]) for header in self.base_headers)])
 
 
 app = QApplication(sys.argv)
