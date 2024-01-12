@@ -171,6 +171,62 @@ class MainWindow(QMainWindow):
         
         data = []
         if any((tag.children()[1].text() == "Fav") for tag in tags) and any((tag.children()[1].text() == "Name") for tag in tags):
+            # What I want
+            data = [
+                ('Fav=True', '', '', '', '',
+                    [('Name=3', '', '', '', '',
+                        [('', 'True', '3', '2', 'Surgery')]),
+                    ('Name=4', '', '', '', '',
+                        [('', 'True', '4', '2', 'Tree')])]),
+                ('Fav=False', '', '', '', '',
+                    [('Name=2', '', '', '', '',
+                        [('', 'False', '2', '1', 'Tree')]),
+                    ('Name=1', '', '', '', '',
+                    [('', 'False', '1', '1', 'Surgery')])])
+            ]
+
+            # What I'm obtaining now
+            data:  [
+                ('Fav=False', '', '', '', '',
+                    [(('Name=1', '', '', '', ''),
+                        [('', 'False', '1', '1', 'Surgery')]),
+                    (('Name=2', '', '', '', ''),
+                        [('', 'False', '2', '1', 'Tree')])]),
+                ('Fav=True', '', '', '', '',
+                    [(('Name=4', '', '', '', ''),
+                        [('', 'True', '4', '2', 'Tree')]),
+                    (('Name=3', '', '', '', ''),
+                        [('', 'True', '3', '2', 'Surgery')])])
+            ]
+            data:  [
+                ('Fav=True', '', '', '', '',
+                    [('Name=4', '', '', '', ''), 
+                        [('', 'True', '4', '2', 'Tree')],
+                    ('Name=3', '', '', '', ''),
+                        [('', 'True', '3', '2', 'Surgery')]]),
+                ('Fav=False', '', '', '', '',
+                    [('Name=1', '', '', '', ''),
+                        [('', 'False', '1', '1', 'Surgery')],
+                    ('Name=2', '', '', '', ''),
+                        [('', 'False', '2', '1', 'Tree')]])
+            ]
+
+            data = [
+                ('Fav=True', '', '', '', '',
+                    ['Name=3', '', '', '', '',
+                        [('', 'True', '3', '2', 'Surgery')],
+                    'Name=4', '', '', '', '',
+                        [('', 'True', '4', '2', 'Tree')]]),
+                ('Fav=False', '', '', '', '',
+                    ['Name=2', '', '', '', '',
+                        [('', 'False', '2', '1', 'Tree')],
+                    'Name=1', '', '', '', '',
+                    [('', 'False', '1', '1', 'Surgery')]])
+            ]
+
+
+
+            # ORIGINAL RESULT, let it be
             data = [
                 ('Fav=false', '', '', 
                     [('Name=1', '', '',
