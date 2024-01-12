@@ -185,7 +185,37 @@ class MainWindow(QMainWindow):
                     [('', 'False', '1', '1', 'Surgery')])])
             ]
 
+            data = [
+                ('Fav=True', '', '', '', '',
+                    [('Name=3', '', '', '', '',
+                      [('Branch: Surgery', '', '', '', '',
+                        [('', 'True', '3', '2', 'Surgery')])]),
+                    ('Name=4', '', '', '', '',
+                        [('', 'True', '4', '2', 'Tree')])]),
+                ('Fav=False', '', '', '', '',
+                    [('Name=2', '', '', '', '',
+                        [('', 'False', '2', '1', 'Tree')]),
+                    ('Name=1', '', '', '', '',
+                        [('', 'False', '1', '1', 'Surgery'),
+                         ('', 'False', '1', '1', 'Surgery')])])
+            ]
+
+
             # What I'm obtaining now
+
+            data = [
+                ('Fav=True', '', '', '', '',
+                    ['Name=3', '', '', '', '',
+                        [('', 'True', '3', '2', 'Surgery')],
+                    'Name=4', '', '', '', '',
+                        [('', 'True', '4', '2', 'Tree')]]),
+                ('Fav=False', '', '', '', '',
+                    ['Name=2', '', '', '', '',
+                        [('', 'False', '2', '1', 'Tree')],
+                    'Name=1', '', '', '', '',
+                    [('', 'False', '1', '1', 'Surgery')]])
+            ]
+            
             data:  [
                 ('Fav=False', '', '', '', '',
                     [(('Name=1', '', '', '', ''),
@@ -210,20 +240,6 @@ class MainWindow(QMainWindow):
                     ('Name=2', '', '', '', ''),
                         [('', 'False', '2', '1', 'Tree')]])
             ]
-
-            data = [
-                ('Fav=True', '', '', '', '',
-                    ['Name=3', '', '', '', '',
-                        [('', 'True', '3', '2', 'Surgery')],
-                    'Name=4', '', '', '', '',
-                        [('', 'True', '4', '2', 'Tree')]]),
-                ('Fav=False', '', '', '', '',
-                    ['Name=2', '', '', '', '',
-                        [('', 'False', '2', '1', 'Tree')],
-                    'Name=1', '', '', '', '',
-                    [('', 'False', '1', '1', 'Surgery')]])
-            ]
-
 
 
             # ORIGINAL RESULT, let it be

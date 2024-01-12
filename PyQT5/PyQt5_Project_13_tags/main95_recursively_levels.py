@@ -172,7 +172,7 @@ class MainWindow(QMainWindow):
         self.horizontal_layout_2.addWidget(self.tree_table)
 
 
-    # tag_value = 'Fav' / 'Name'; main_line_value = 'False' / '1'
+    # current_tag = 'Fav' / 'Name'; main_line_value = 'False' / '1'
     def createTreeTableGrouping(self, tags):
         print("###########################")
         print("###########################")
@@ -185,47 +185,31 @@ class MainWindow(QMainWindow):
         self.tree_table = TreeTableGrouping(self.result_data, self.group_headers)
         self.horizontal_layout_2.addWidget(self.tree_table)
     
-    def createGroupedData(self, level, tags, data, all_sub_lines=[], conditions=[]):
+    def createGroupedData(self, level, tags, data, all_sub_lines=[]):
         if level < len(tags):
-            current_tag = tags[level]
-            tag_value = current_tag.children()[1].text()
+            tag = tags[level]
+            current_tag = tag.children()[1].text() # current_tag -> 'Fav' / 'Name'
             
-            # Filter data based on conditions
-            filtered_data = [item for item in data if all(item[condition_tag] == condition_value for condition in conditions for condition_tag, condition_value in condition.items())]
             # Get distinct values from the filtered data
-            distinct_values = set(item[tag_value] for item in filtered_data)
+            distinct_values = set(row[current_tag] for row in data)
             
-            for value in distinct_values:
-                main_line = (f"{tag_value}={value}",) + ('',) * len(self.base_headers)
+            for value in distinct_values: # value -> 'True' / '1'
+                main_line = (f"{current_tag}={value}",) + ('',) * len(self.base_headers)
                 
-                # Prepare conditions for the next level
-                next_conditions = conditions + [{tag_value: value}]
+                filtered_data = [row for row in data if row[current_tag] == value]
 
-                # Recursive call to calculate sub_lines for the next level
-                sub_lines = []
-                self.createGroupedData(level + 1, tags, data, sub_lines, next_conditions)
+                # Recursive call with filtered_data
+                self.createGroupedData(level + 1, tags, filtered_data, all_sub_lines)
                 
                 # Append data based on the level
-                if level == 0:
-                    self.result_data.append((*main_line, [item for sub_line in sub_lines for item in sub_line]))
-                else:
-                    # Append to the previous level with opening and closing parentheses
-                    all_sub_lines.append((*main_line, [item for sub_line in sub_lines for item in sub_line]))
+                self.result_data.append((*main_line, [row for sub_line in all_sub_lines for row in sub_line]))
+
+                all_sub_lines.clear()
+
         else:
             # Calculate sub_lines only at the last level
-            sub_lines = []
             for item in data:
-                # Add conditions based on all levels
-                if all(item[condition_tag] == condition_value for condition in conditions for condition_tag, condition_value in condition.items()):
-                    sub_lines.append([('',) + tuple(str(item[header]) for header in self.base_headers)])
-
-                print("Conditions:")
-                for condition in conditions:
-                    print(conditions)
-                print(sub_lines)
-            
-            # Append sub_lines from the last level to the overall list
-            all_sub_lines.extend(sub_lines)
+                all_sub_lines.append([('',) + tuple(str(item[header]) for header in self.base_headers)])
 
 
 app = QApplication(sys.argv)
