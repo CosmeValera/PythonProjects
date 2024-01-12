@@ -181,7 +181,7 @@ class MainWindow(QMainWindow):
             tag_value = tag.children()[1].text()
 
             distinct_values = set(item[tag_value] for item in self.base_data)
-            main_lines = [(f"{tag_value}:{value}",) + ('',) * len(self.base_headers) for value in distinct_values]
+            main_lines = [(f"{tag_value}={value}",) + ('',) * len(self.base_headers) for value in distinct_values]
 
             # Generate sub-lines
             for main_line in main_lines:
