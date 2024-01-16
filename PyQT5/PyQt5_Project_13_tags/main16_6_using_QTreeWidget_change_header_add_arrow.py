@@ -2,6 +2,7 @@ import sys
 from PyQt5.QtWidgets import QApplication, QHeaderView, QTreeWidget, QTreeWidgetItem, QPushButton, QWidget, QVBoxLayout, QHBoxLayout, QLabel, QMainWindow, QFrame
 from PyQt5.QtCore import Qt, QMimeData
 from PyQt5.QtGui import QDrag, QPixmap
+from qtawesome import icon
 
 class TreeTable(QTreeWidget):
     def __init__(self):
@@ -25,9 +26,17 @@ class TreeTable(QTreeWidget):
             if len(item) > 2:
                 self.addItemsRecursively(currentItem, item[2])
 
+            # if True:
+            #     fa_arrow = 'fa.arrow-down'
+            #     arrow_icon = icon(fa_arrow, color='#999999')
+            #     currentItem.setIcon(0, arrow_icon)
+
     class DraggableHeaderView(QHeaderView):
         def __init__(self, orientation, parent):
             super().__init__(orientation, parent)
+            fa_arrow = 'fa.arrow-down'
+            arrow_icon = icon(fa_arrow, color='#999999')
+            self.setSectionIcon.setIcon(0, arrow_icon)
 
         def mousePressEvent(self, event):
             if event.button() == Qt.LeftButton:
