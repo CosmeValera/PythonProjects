@@ -1,36 +1,35 @@
-from PyQt5.QtWidgets import QApplication, QTreeWidget, QTreeWidgetItem, QVBoxLayout, QWidget
+from PyQt5.QtWidgets import QApplication, QTreeWidget, QTreeWidgetItem, QHeaderView
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import Qt
+from qtawesome import icon
 
-class TreeWidgetDemo(QWidget):
-    def __init__(self):
-        super().__init__()
+def main():
+    app = QApplication([])
 
-        self.tree = QTreeWidget(self)
-        self.tree.setColumnCount(2)
-        self.tree.setHeaderLabels(['🔍 Id', '🔍 Name'])
+    data = [
+        ('1', 'Category 1', [('1.1', 'Item 1.1')]),
+        ('2', 'Category 2', [('2.1', 'Item 2.1'), ('2.2', 'Item 2.2')]),
+    ]
 
-        data = [
-            ('1', 'Category 1', [('1.1', 'Item 1.1')]),
-            ('2', 'Category 2', [('2.1', 'Item 2.1'), ('2.2', 'Item 2.2')]),
-        ]
+    tree = QTreeWidget()
+    tree.setHeaderLabels(['Id', 'Name'])
+    tree.header().setDefaultAlignment(Qt.AlignLeft)
 
-        for id, name, children in data:
-            parent = QTreeWidgetItem(self.tree)
-            parent.setText(0, id)
-            parent.setText(1, name)
-            parent.setFlags(parent.flags() | Qt.ItemIsTristate | Qt.ItemIsUserCheckable)
-            for child_id, child_name in children:
-                child = QTreeWidgetItem(parent)
-                child.setFlags(child.flags() | Qt.ItemIsTristate | Qt.ItemIsUserCheckable)
-                child.setText(0, child_id)
-                child.setText(1, child_name)
+    header_flag = True  # Set this flag as per your requirement
+    fa_arrow = 'fa.arrow-down' if header_flag else 'fa.arrow-up'
+    arrow_icon = icon(fa_arrow, color='#999999')
 
-        layout = QVBoxLayout(self)
-        layout.addWidget(self.tree)
+    tree.headerItem().setIcon(0, arrow_icon)
+    tree.headerItem().setIcon(1, arrow_icon)
+
+    for id_, name, items in data:
+        parent = QTreeWidgetItem([id_, name])
+        tree.addTopLevelItem(parent)
+        for sub_id, sub_name in items:
+            QTreeWidgetItem(parent, [sub_id, sub_name])
+
+    tree.show()
+    app.exec_()
 
 if __name__ == '__main__':
-    app = QApplication([])
-    demo = TreeWidgetDemo()
-    demo.show()
-    app.exec_()
+    main()
