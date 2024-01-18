@@ -11,15 +11,24 @@ class TreeTable(QTreeWidget):
         headers = ['Id', 'Name']
 
         self.setColumnCount(len(headers))
-
         self.setHeaderLabels(headers)
         self.addItemsRecursively(self, data)
+
+        # Connect the itemClicked signal to the custom method
+        self.itemClicked.connect(self.on_item_clicked)
 
     def addItemsRecursively(self, parent, items):
         for item in items:
             currentItem = QTreeWidgetItem(parent, item[:2])
             if len(item) > 2:
                 self.addItemsRecursively(currentItem, item[2])
+
+    def on_item_clicked(self, item, column):
+        # Check if the clicked item has values
+        if item.childCount() == 0:
+            # Extract values from the clicked item
+            values = [item.text(column) for column in range(self.columnCount())]
+            print("Clicked Item Values:", values)
 
 class MainWindow(QMainWindow):
     def __init__(self):
