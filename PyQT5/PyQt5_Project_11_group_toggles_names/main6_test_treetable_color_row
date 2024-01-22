@@ -1,0 +1,43 @@
+import sys
+from PyQt5.QtWidgets import QApplication, QMainWindow, QTreeWidget, QTreeWidgetItem
+from PyQt5.QtGui import QColor
+from PyQt5.QtCore import Qt
+
+class MyTreeWidget(QTreeWidget):
+    def __init__(self):
+        super().__init__()
+
+        self.setColumnCount(1)
+        self.setHeaderLabels(['Items', 'Name'])
+
+        # Add two rows to the QTreeWidget
+        self.addTreeItem("Row 1", "Good", background_color=QColor("red"))
+        self.addTreeItem("Row 2", "Evil")
+
+    def addTreeItem(self, text, text2, background_color=None):
+        item = QTreeWidgetItem(self)
+        item.setText(0, text)
+        item.setText(1, text2)
+
+        if background_color:
+            item.setData(0, Qt.BackgroundRole, background_color)
+
+class MainWindow(QMainWindow):
+    def __init__(self):
+        super().__init__()
+
+        self.setWindowTitle('PyQt Tree Widget Example')
+        self.setGeometry(100, 100, 400, 300)
+
+        # Create a QTreeWidget and set it as the central widget
+        self.tree_widget = MyTreeWidget()
+        self.setCentralWidget(self.tree_widget)
+
+def main():
+    app = QApplication(sys.argv)
+    main_window = MainWindow()
+    main_window.show()
+    sys.exit(app.exec_())
+
+if __name__ == '__main__':
+    main()
