@@ -20,7 +20,8 @@ class MyTreeWidget(QTreeWidget):
         item.setText(1, text2)
 
         if background_color:
-            item.setData(0, Qt.BackgroundRole, background_color)
+            for col in range(self.columnCount()):
+                item.setBackground(col, background_color)
 
 class MainWindow(QMainWindow):
     def __init__(self):
