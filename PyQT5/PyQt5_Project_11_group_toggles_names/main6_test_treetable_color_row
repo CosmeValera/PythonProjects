@@ -1,5 +1,5 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QMainWindow, QTreeWidget, QTreeWidgetItem
+from PyQt5.QtWidgets import QApplication, QMainWindow, QTreeWidget, QTreeWidgetItem, QLabel
 from PyQt5.QtGui import QColor
 from PyQt5.QtCore import Qt
 
@@ -16,16 +16,19 @@ class MyTreeWidget(QTreeWidget):
 
     def addTreeItem(self, text, text2, background_color=None):
         item = QTreeWidgetItem(self)
-        item.setText(0, text)
-        item.setText(1, text2)
+        
+        label1 = QLabel(text)
+        label2 = QLabel(text2)
 
         if background_color:
-            for col in range(self.columnCount()):
-                item.setBackground(col, background_color)
+            label1.setStyleSheet(f"background-color: {background_color.name()};")
+            label2.setStyleSheet(f"background-color: {background_color.name()};")
 
-        
-        item.setTextAlignment(0, Qt.AlignCenter)
-        item.setTextAlignment(1, Qt.AlignCenter)
+        label1.setAlignment(Qt.AlignCenter)
+        label2.setAlignment(Qt.AlignCenter)
+
+        self.setItemWidget(item, 0, label1)
+        self.setItemWidget(item, 1, label2)
 
 class MainWindow(QMainWindow):
     def __init__(self):
