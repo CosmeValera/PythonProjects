@@ -23,6 +23,10 @@ class MyTreeWidget(QTreeWidget):
             for col in range(self.columnCount()):
                 item.setBackground(col, background_color)
 
+        
+        item.setTextAlignment(0, Qt.AlignCenter)
+        item.setTextAlignment(1, Qt.AlignCenter)
+
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
