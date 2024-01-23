@@ -8,7 +8,7 @@ class TagBar(QWidget):
         self.initUI()
 
     def initUI(self):
-        layout = QVBoxLayout(self)
+        layout = QHBoxLayout(self)
 
         # Create a tag with text and a close button inside a QFrame
         tagFrame = QFrame(self)
@@ -25,6 +25,14 @@ class TagBar(QWidget):
 
         layout.addWidget(tagFrame, alignment=Qt.AlignLeft)
 
+        # Add an invisible tagFrame to act as a placeholder
+        invisibleTagFrame = QFrame(self)
+        invisibleTagFrame.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        layout.addWidget(invisibleTagFrame)
+
+        # Set the background color directly on the TagBar
+        self.setStyleSheet("background-color: red;")
+
         self.setLayout(layout)
 
 class MainWindow(QMainWindow):
@@ -37,16 +45,13 @@ class MainWindow(QMainWindow):
         centralWidget = QWidget(self)
         self.setCentralWidget(centralWidget)
 
-        # Create a horizontal layout
-        layout = QHBoxLayout(centralWidget)
+        # Create a vertical layout
+        layout = QVBoxLayout(centralWidget)
 
-        # Create TagBar and QLabel, both taking 50% of space
+        # Create TagBar
         tagBar = TagBar(self)
-        tagBar.setStyleSheet("background-color: red;")
-        label = QLabel("Sample QLabel", self)
 
-        layout.addWidget(tagBar, 1)
-        layout.addWidget(label, 1)
+        layout.addWidget(tagBar)
 
         centralWidget.setLayout(layout)
 
