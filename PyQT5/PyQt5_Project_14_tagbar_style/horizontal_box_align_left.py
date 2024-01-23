@@ -45,13 +45,16 @@ class MainWindow(QMainWindow):
         centralWidget = QWidget(self)
         self.setCentralWidget(centralWidget)
 
-        # Create a vertical layout
-        layout = QVBoxLayout(centralWidget)
+        # Create a horizontal layout
+        layout = QHBoxLayout(centralWidget)
 
-        # Create TagBar
+        # Create TagBar and QLabel, both taking 50% of space
         tagBar = TagBar(self)
+        tagBar.setStyleSheet("background-color: red;")
+        label = QLabel("Sample QLabel", self)
 
-        layout.addWidget(tagBar)
+        layout.addWidget(tagBar, 1)
+        layout.addWidget(label, 1)
 
         centralWidget.setLayout(layout)
 
