@@ -1,5 +1,5 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QTableWidget, QTableWidgetItem, QHeaderView, QTreeWidget, QTreeWidgetItem, QPushButton, QWidget, QVBoxLayout, QHBoxLayout, QLabel, QMainWindow, QFrame
+from PyQt5.QtWidgets import QApplication, QTableWidget, QTableWidgetItem, QHeaderView, QTreeWidget, QTreeWidgetItem, QPushButton, QWidget, QVBoxLayout, QHBoxLayout, QLabel, QMainWindow, QFrame, QSizePolicy
 from PyQt5.QtCore import Qt, QMimeData
 from PyQt5.QtGui import QDrag, QPixmap
 from qt_material import apply_stylesheet
@@ -99,11 +99,13 @@ class TagBar(QWidget):
         tag = QFrame()
         tag.setContentsMargins(2, 2, 2, 2)
         tag.setFixedHeight(28)
+        
         hbox = QHBoxLayout()
         hbox.setContentsMargins(4, 4, 4, 4)
+
         tag_label = QLabel(text)
-        tag_label.setAlignment(Qt.AlignCenter)
         hbox.addWidget(tag_label)
+
         close_button = QPushButton('x')
         close_button.setFixedSize(20, 20)
         close_button.setStyleSheet('text-align: center;')
@@ -123,6 +125,8 @@ class TagBar(QWidget):
         }
                           ''')
         
+        # Set size policy for the tag
+        tag.setSizePolicy(QSizePolicy.Maximum, QSizePolicy.Fixed)
 
         self.tree_table_callback(self.tags)
 
