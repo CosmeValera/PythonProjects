@@ -97,7 +97,10 @@ class TagBar(QWidget):
     # TODO: Change this, to change tag style.
     def add_tag_to_bar(self, text):
         tag = QFrame()
-        tag.setStyleSheet('border:1px solid rgb(192, 192, 192); border-radius: 4px;')
+        tag.setStyleSheet('border:1px solid rgb(192, 192, 192); border-radius: 14px;')
+        # tag.setStyleSheet('border-radius: 14px;')  # Increase border-radius for a more rounded appearance
+        #             #   'background-color: rgb(200, 230, 255);'  # Light blue background color
+        #             #   'padding: 6px;')  # Add some padding for a cleaner look
         tag.setContentsMargins(2, 2, 2, 2)
         tag.setFixedHeight(28)
         hbox = QHBoxLayout()
