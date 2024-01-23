@@ -86,6 +86,9 @@ class TagBar(QWidget):
         self.h_layout = QHBoxLayout(self)
         self.tree_table_callback = tree_table_callback
 
+        # Create an invisible tag as a placeholder
+        self.add_invisible_tag()
+
     def dragEnterEvent(self, event):
         event.accept()
 
@@ -140,11 +143,21 @@ class TagBar(QWidget):
 
         self.tree_table_callback(self.tags)
 
-        #Print  :)       
+        # Print  :)       
         print(f'Removed tag. Now there are {len(self.tags)} tags.')
         for tag in self.tags:
             print(tag.children()[1].text())
 
+    def add_invisible_tag(self):
+        invisible_tag = QFrame()
+        invisible_tag.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
+        self.h_layout.addWidget(invisible_tag)
+
+        # Set size policy for the invisible tag
+        invisible_tag.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
+
+    def dragMoveEvent(self, event):
+        event.accept()
 
 class MainWindow(QMainWindow):
     base_data = [
@@ -230,7 +243,6 @@ class MainWindow(QMainWindow):
             # Calculate sub_lines only at the last level
             for row in data:
                 all_sub_lines.append([('',) + tuple(str(row[header]) for header in self.base_headers)])
-
 
 app = QApplication(sys.argv)
 window = MainWindow()
