@@ -97,23 +97,32 @@ class TagBar(QWidget):
     # TODO: Change this, to change tag style.
     def add_tag_to_bar(self, text):
         tag = QFrame()
-        tag.setStyleSheet('border:1px solid rgb(192, 192, 192); border-radius: 14px;')
-        # tag.setStyleSheet('border-radius: 14px;')  # Increase border-radius for a more rounded appearance
-        #             #   'background-color: rgb(200, 230, 255);'  # Light blue background color
-        #             #   'padding: 6px;')  # Add some padding for a cleaner look
         tag.setContentsMargins(2, 2, 2, 2)
         tag.setFixedHeight(28)
         hbox = QHBoxLayout()
         hbox.setContentsMargins(4, 4, 4, 4)
         tag_label = QLabel(text)
+        tag_label.setAlignment(Qt.AlignCenter)
         hbox.addWidget(tag_label)
         close_button = QPushButton('x')
         close_button.setFixedSize(20, 20)
+        close_button.setStyleSheet('text-align: center;')
         close_button.clicked.connect(lambda: self.remove_tag(text))
         hbox.addWidget(close_button)
         tag.setLayout(hbox)
         self.h_layout.addWidget(tag)
         self.tags.append(tag)
+
+        tag.setStyleSheet('''
+                          background-color: #454545; border-radius: 14px;
+
+        QPushButton {
+            color: #F9F9F9;
+            background-color: #DF0024;
+            border-color: #DF0024;
+        }
+                          ''')
+        
 
         self.tree_table_callback(self.tags)
 
