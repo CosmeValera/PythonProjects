@@ -168,6 +168,9 @@ class MainWindow(QMainWindow):
         self.setWindowTitle('Tagbar')
         self.resize(750, 400)
 
+        initial_tag_value = 'Fav'
+        self.tag_bar.add_tag_to_bar(initial_tag_value)
+
     def update_tree_table(self, tags):
         if tags:
             self.createTreeTableGrouping(tags)
