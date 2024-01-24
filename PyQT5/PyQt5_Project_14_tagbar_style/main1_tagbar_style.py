@@ -1,5 +1,5 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QTableWidget, QTableWidgetItem, QHeaderView, QTreeWidget, QTreeWidgetItem, QPushButton, QWidget, QVBoxLayout, QHBoxLayout, QLabel, QMainWindow, QFrame, QSizePolicy
+from PyQt5.QtWidgets import QApplication, QTableWidget, QTableWidgetItem, QHeaderView, QTreeWidget, QTreeWidgetItem, QPushButton, QWidget, QVBoxLayout, QHBoxLayout, QLabel, QMainWindow, QFrame, QSizePolicy, QLineEdit
 from PyQt5.QtCore import Qt, QMimeData
 from PyQt5.QtGui import QDrag, QPixmap
 from qt_material import apply_stylesheet
@@ -98,32 +98,26 @@ class TagBar(QWidget):
         event.accept()
 
     def add_tag_to_bar(self, text):
-        tag = QFrame()
-        tag.setContentsMargins(2, 2, 2, 2)
-        tag.setFixedHeight(28)
+        tag = QWidget()
+        tag.setStyleSheet("QWidget {background-color: #191919; border-radius: 14px;}")
         
-        hbox = QHBoxLayout()
-        hbox.setContentsMargins(0, 0, 0, 0)
-        hbox.setAlignment(Qt.AlignVCenter)
+        hbox = QHBoxLayout(tag)
+        hbox.setContentsMargins(4, 4, 4, 4)
 
         tag_label = QLabel(text)
-        tag_label.setStyleSheet('margin-left: 6px')
+        tag_label.setStyleSheet('margin-left: 6px; border: 0px; padding: 0;')
         hbox.addWidget(tag_label)
 
         close_button = QPushButton('✕')
-        close_button.setFixedSize(14, 14)
-        hbox.addWidget(close_button)
+        close_button.setFixedSize(16, 16)
         close_button.clicked.connect(lambda: self.remove_tag(text))
-        close_button.setContentsMargins(0, 0, 0, 0)
-        close_button.setStyleSheet("border: 0px solid black; padding: 0; margin: 0")
+        close_button.setStyleSheet("border: 0px; padding: 0; margin: 0px 6px 0px 0px; color: #999999;")
+        hbox.addWidget(close_button)
         print(close_button.minimumSizeHint() )
 
-        tag.setLayout(hbox)
         self.h_layout.insertWidget(len(self.tags), tag)  # Insert the new tag before the invisible tag
         self.tags.append(tag)
 
-        tag.setStyleSheet('background-color: #191919; border-radius: 14px;')
-        
         self.tree_table_callback(self.tags)
 
     def remove_tag(self, text):
