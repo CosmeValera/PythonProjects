@@ -113,8 +113,8 @@ class TagBar(QWidget):
         close_button.clicked.connect(lambda: self.remove_tag(text))
         close_button.setStyleSheet("border: 0px; padding: 0; margin: 0px 6px 0px 0px; color: #999999;")
         hbox.addWidget(close_button)
-        print(close_button.minimumSizeHint() )
 
+        print(len(self.tags))
         self.h_layout.insertWidget(len(self.tags), tag)  # Insert the new tag before the invisible tag
         self.tags.append(tag)
 
@@ -139,12 +139,9 @@ class TagBar(QWidget):
         self.add_invisible_tag()
 
     def add_invisible_tag(self):
-        invisible_tag = QFrame()
+        invisible_tag = QWidget()
         invisible_tag.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
         self.h_layout.addWidget(invisible_tag)
-
-        # Set size policy for the invisible tag
-        invisible_tag.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
 
     def dragMoveEvent(self, event):
         event.accept()
