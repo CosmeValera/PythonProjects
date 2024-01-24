@@ -97,40 +97,33 @@ class TagBar(QWidget):
         self.add_tag_to_bar(text)
         event.accept()
 
-    # TODO: Change this, to change tag style.
     def add_tag_to_bar(self, text):
         tag = QFrame()
         tag.setContentsMargins(2, 2, 2, 2)
         tag.setFixedHeight(28)
         
         hbox = QHBoxLayout()
-        hbox.setContentsMargins(4, 4, 4, 4)
+        hbox.setContentsMargins(0, 0, 0, 0)
+        hbox.setAlignment(Qt.AlignVCenter)
 
         tag_label = QLabel(text)
+        tag_label.setStyleSheet('margin-left: 6px')
         hbox.addWidget(tag_label)
 
-        close_button = QPushButton('x')
-        close_button.setFixedSize(20, 20)
-        close_button.setStyleSheet('text-align: center;')
-        close_button.clicked.connect(lambda: self.remove_tag(text))
+        close_button = QPushButton('✕')
+        close_button.setFixedSize(14, 14)
         hbox.addWidget(close_button)
+        close_button.clicked.connect(lambda: self.remove_tag(text))
+        close_button.setContentsMargins(0, 0, 0, 0)
+        close_button.setStyleSheet("border: 0px solid black; padding: 0; margin: 0")
+        print(close_button.minimumSizeHint() )
+
         tag.setLayout(hbox)
-        self.h_layout.addWidget(tag)
+        self.h_layout.insertWidget(len(self.tags), tag)  # Insert the new tag before the invisible tag
         self.tags.append(tag)
 
-        tag.setStyleSheet('''
-                          background-color: #454545; border-radius: 14px;
-
-        QPushButton {
-            color: #F9F9F9;
-            background-color: #DF0024;
-            border-color: #DF0024;
-        }
-                          ''')
+        tag.setStyleSheet('background-color: #191919; border-radius: 14px;')
         
-        # Set size policy for the tag
-        tag.setSizePolicy(QSizePolicy.Maximum, QSizePolicy.Fixed)
-
         self.tree_table_callback(self.tags)
 
     def remove_tag(self, text):
@@ -148,6 +141,9 @@ class TagBar(QWidget):
         for tag in self.tags:
             print(tag.children()[1].text())
 
+        # Re-add the invisible tag to the end
+        self.add_invisible_tag()
+
     def add_invisible_tag(self):
         invisible_tag = QFrame()
         invisible_tag.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
@@ -158,6 +154,7 @@ class TagBar(QWidget):
 
     def dragMoveEvent(self, event):
         event.accept()
+
 
 class MainWindow(QMainWindow):
     base_data = [
