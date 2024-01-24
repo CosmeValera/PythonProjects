@@ -101,20 +101,21 @@ class TagBar(QWidget):
         tag = QWidget()
         tag.setStyleSheet("QWidget {background-color: #191919; border-radius: 14px;}")
         
-        hbox = QHBoxLayout(tag)
+        hbox = QHBoxLayout()
         hbox.setContentsMargins(4, 4, 4, 4)
 
         tag_label = QLabel(text)
         tag_label.setStyleSheet('margin-left: 6px; border: 0px; padding: 0;')
-        hbox.addWidget(tag_label)
 
         close_button = QPushButton('✕')
         close_button.setFixedSize(16, 16)
         close_button.clicked.connect(lambda: self.remove_tag(text))
         close_button.setStyleSheet("border: 0px; padding: 0; margin: 0px 6px 0px 0px; color: #999999;")
-        hbox.addWidget(close_button)
 
-        print(len(self.tags))
+        hbox.addWidget(tag_label)
+        hbox.addWidget(close_button)
+        tag.setLayout(hbox)
+
         self.h_layout.insertWidget(len(self.tags), tag)  # Insert the new tag before the invisible tag
         self.tags.append(tag)
 
