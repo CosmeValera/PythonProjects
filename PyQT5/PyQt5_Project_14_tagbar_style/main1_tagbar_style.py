@@ -144,8 +144,8 @@ class TagBar(QWidget):
         invisible_tag.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
         self.h_layout.addWidget(invisible_tag)
 
-    def dragMoveEvent(self, event):
-        event.accept()
+    # def dragMoveEvent(self, event):
+    #     event.accept()
 
 
 class MainWindow(QMainWindow):
